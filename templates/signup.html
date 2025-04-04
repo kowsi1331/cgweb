@@ -11,22 +11,21 @@
         position: absolute;
         top: 10px;
         left: 20px;
-        background-color: #ff4d4d; /* Same as Logout button (Red) */
+        background-color: #ff4d4d;
         color: white;
         padding: 8px;
         padding-top: 2px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-weight:bolder;
+        font-weight: bolder;
         text-decoration: none;
         transition: 0.3s;
     }
-
     .back-btn:hover {
         transform: scale(1.1); 
     }
-    .size{
+    .size {
         width: 90%;
     }
 </style>
@@ -34,14 +33,32 @@
     <strong><a href="javascript:history.back()" class="back-btn">&larr;</a></strong>
     <div class="auth-container">
         <h2>Signup</h2>
-        <form action="/signup" method="POST">
+        <form action="/signup" method="POST" onsubmit="return validateSignup()">
             <input type="text" class="size" name="name" placeholder="Full Name" required>
-            <input type="email" class="size" name="email" placeholder="Email" required>
-            <input type="password" class="size" name="password" placeholder="Password" required>
+            <input type="email" class="size" id="signup_email" name="email" placeholder="Email" required>
+            <input type="password" class="size" id="signup_password" name="password" placeholder="Password" required>
             <button type="submit">Signup</button>
         </form>
         <p>Already have an account? <a href="/login">Login</a></p>
     </div>
 
+    <script>
+        function validateSignup() {
+            const email = document.getElementById("signup_email").value;
+            const password = document.getElementById("signup_password").value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

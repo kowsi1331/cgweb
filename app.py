@@ -2,7 +2,8 @@ from flask import Flask, request, session, redirect, url_for, render_template
 import sqlite3
 import datetime
 import json
-
+import os
+import re
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -59,12 +60,29 @@ def update_group():
 
 
 # ✅ Signup Page
+
+
+def is_valid_email(email):
+    return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
+
+        # Email format check
+        if not is_valid_email(email):
+            return render_template('signup.html', error="Invalid email format!")
+
+        # Password length check
+        if len(password) < 6:
+            return render_template('signup.html', error="Password must be at least 6 characters!")
+
+        # (Optional) Strong password check: at least 1 letter and 1 number
+        if not re.search(r'[A-Za-z]', password) or not re.search(r'\d', password):
+            return render_template('signup.html', error="Password must contain at least one letter and one number!")
 
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -77,13 +95,15 @@ def signup():
             return render_template('signup.html', error="Email already registered!")
 
         cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 0)", 
-                       (name, email, password))
+               (name, email, password))
+
         conn.commit()
         conn.close()
 
         return redirect(url_for('login'))
 
     return render_template('signup.html')
+
 
 def log_activity(user_id, activity):
     conn = sqlite3.connect('career.db')
@@ -103,27 +123,37 @@ def login():
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password))
         user = cursor.fetchone()
-        conn.close()
 
         if user:
             session['user_id'] = user['id']
             session['is_admin'] = user['is_admin']
 
-            if session['is_admin'] == 1:
+            # Update login time
+            login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user['id']))
+
+            # Log activity
+            cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user['id'], "Logged in"))
+
+            conn.commit()
+            conn.close()
+
+            if user['is_admin'] == 1:
                 return redirect(url_for('admin_dashboard'))
             else:
                 return redirect(url_for('student_dashboard'))
         else:
+            conn.close()
             return render_template('login.html', error="Invalid email or password")
-        login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user[0]))
-        conn.commit()
+
+    return render_template('login.html')
+
 
         # Log activity
-        cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user[0], "Logged in"))
-        conn.commit()
+    cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user[0], "Logged in"))
+    conn.commit()
         
-        conn.close()
+    conn.close()
     return render_template('login.html')
 
 @app.route('/track_activity/<activity>')
@@ -382,4 +412,5 @@ def sample():
     return render_template('sample.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+     port = int(os.environ.get("PORT", 5000))
+     app.run(host="0.0.0.0", port=port)

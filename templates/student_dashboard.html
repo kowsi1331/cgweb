@@ -54,21 +54,24 @@
     </a>
     <h2>Welcome, {{ student.name }}</h2>
     {% if not student.student_group or student.student_group == "Not Selected" %}
-        <div class="details-form">
-            <h4>Please Select Your +2 Group</h4>
-            <form action="/update_group" method="POST">
-                <label for="group">Select Group:</label>
-                <select name="group" required>
-                    <option value="Science">Science</option>
-                    <option value="Commerce">Commerce</option>
-                    <option value="Arts">Arts</option>
-                </select>
-                <button type="submit">Save</button>
-            </form>
-        </div>
-    {% else %}
-        <h4>Your +2 Group: {{ student.student_group }}</h4>
-    {% endif %}
+    <div class="details-form">
+        <h4>Please Select Your +2 Group</h4>
+        <form action="/update_group" method="POST">
+            <label for="group">Select Group:</label>
+            <select name="group" required>
+                <option value="Bio-Maths">Bio-Maths</option>
+                <option value="Science with Computer Science">Science with Computer Science</option>
+                <option value="Commerce with Computer Applications">Commerce with Computer Applications</option>
+                <option value="Pure Commerce">Pure Commerce</option>
+                <option value="Arts with Computer Applications">Arts with Computer Applications</option>
+                <option value="Pure Arts">Pure Arts</option>
+            </select>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+{% else %}
+    <h4>Your +2 Group: {{ student.student_group }}</h4>
+{% endif %}
 
     <p>Test Score: {{ student.test_score }}</p>
     
