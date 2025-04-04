@@ -224,69 +224,113 @@ def submit_test():
     cursor.execute("SELECT student_group FROM users WHERE id=?", (user_id,))
     group = cursor.fetchone()[0]
 
-    # ✅ Correct answers for each group
+    # Correct answers matching the frontend test
     correct_answers = {
-        "Science": {
-            "q1": "H2O",
-            "q2": "300,000 km/s",
+        "Bio-Maths": {
+            "q1": "Powerhouse of the cell",
+            "q2": "Sin",
             "q3": "Newton",
-            "q4": "Gravity",
-            "q5": "Photosynthesis",
-            "q6": "Electron",
-            "q7": "Cell",
-            "q8": "Oxygen",
-            "q9": "Brain",
-            "q10": "Albert Einstein"
+            "q4": "O Negative",
+            "q5": "cos(x)",
+            "q6": "Pancreas",
+            "q7": "Nucleotides",
+            "q8": "Speed",
+            "q9": "6.022 × 10^23",
+            "q10": "Mendel"
         },
-        "Commerce": {
+        "Science with Computer Science": {
+            "q1": "Central Processing Unit",
+            "q2": "Stack",
+            "q3": "8",
+            "q4": "Router",
+            "q5": "1010",
+            "q6": "HTTP",
+            "q7": "Bill Gates",
+            "q8": "HTML",
+            "q9": "CPU",
+            "q10": "=="
+        },
+        "Commerce with Computer Applications": {
+            "q1": "Tally",
+            "q2": "Web Page Design",
+            "q3": "Excel",
+            "q4": "Hard Disk",
+            "q5": "Buying/Selling Online",
+            "q6": "Ctrl+C",
+            "q7": "Phishing",
+            "q8": "VBA",
+            "q9": "Local Area Network",
+            "q10": "PowerPoint"
+        },
+        "Pure Commerce": {
             "q1": "Gross Domestic Product",
-            "q2": "All of the above",
-            "q3": "Balance Sheet",
-            "q4": "Loan Payable",
-            "q5": "Demand and Supply",
-            "q6": "Income Tax",
-            "q7": "Inflation",
-            "q8": "Raising capital for companies",
-            "q9": "Fiscal Policy",
-            "q10": "Reserve Bank of India"
+            "q2": "Balance Sheet",
+            "q3": "Income Tax",
+            "q4": "Rent Paid",
+            "q5": "Cash",
+            "q6": "Debit & Credit",
+            "q7": "RBI",
+            "q8": "Amount payable",
+            "q9": "Invoice",
+            "q10": "Assets = Liabilities + Capital"
         },
-        "Arts": {
-            "q1": "Leonardo da Vinci",
-            "q2": "Hamlet",
-            "q3": "Cultural Revival",
-            "q4": "Shakespeare",
-            "q5": "Abstract Art",
-            "q6": "Realism",
-            "q7": "Van Gogh",
-            "q8": "Dramatic Monologue",
-            "q9": "Surrealism",
-            "q10": "Greek Mythology"
+        "Arts with Computer Applications": {
+            "q1": "Canva",
+            "q2": "Blender",
+            "q3": "Van Gogh",
+            "q4": "Stylus",
+            "q5": "Cubism",
+            "q6": "MS Word",
+            "q7": "JPEG",
+            "q8": "Graphical User Interface",
+            "q9": "Text Formatting",
+            "q10": "Behance"
+        },
+        "Pure Arts": {
+            "q1": "Shakespeare",
+            "q2": "Bharatanatyam",
+            "q3": "Orange",
+            "q4": "Leonardo da Vinci",
+            "q5": "Sonnet",
+            "q6": "Traditional stories",
+            "q7": "Aesop",
+            "q8": "Violin",
+            "q9": "Drama",
+            "q10": "William Shakespeare"
         }
     }
 
-    score = 0
     group_answers = correct_answers.get(group, {})
+    score = 0
 
-    for question, correct_answer in group_answers.items():
-        user_answer = request.form.get(question)
-        if user_answer == correct_answer:
+    for i in range(1, 11):
+        user_answer = request.form.get(f"q{i}")
+        correct = group_answers.get(f"q{i}")
+        if user_answer == correct:
             score += 1
 
-    # ✅ Determine recommended degrees based on the score
+    # Degree recommendations (adjust if needed)
     degree_recommendations = {
-        "Science": ["B.Sc Physics", "B.Sc Chemistry", "B.Sc Computer Science"],
-        "Commerce": ["B.Com Accounting", "BBA", "B.Com Banking"],
-        "Arts": ["BA Literature", "BA History", "BA Fine Arts"]
+        "Bio-Maths": ["MBBS", "BDS", "B.Pharm", "B.Tech Biotechnology"],
+        "Science with Computer Science": ["B.Tech IT", "B.Sc Computer Science", "BCA"],
+        "Commerce with Computer Applications": ["B.Com CA", "BBA", "B.Com IT"],
+        "Pure Commerce": ["B.Com", "BBA", "CA Foundation"],
+        "Arts with Computer Applications": ["BA English", "BA Journalism", "BFA"],
+        "Pure Arts": ["BA History", "BA Political Science", "BA Literature"]
     }
 
     recommended_degrees = ", ".join(degree_recommendations.get(group, []))
 
-    # ✅ Update score and recommended degrees in database
-    cursor.execute("UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?", (score, recommended_degrees, user_id))
+    # Store result in DB
+    cursor.execute(
+        "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
+        (score, recommended_degrees, user_id)
+    )
     conn.commit()
     conn.close()
 
     return redirect(url_for('student_dashboard'))
+
 
 @app.route('/admin_dashboard')
 def admin_dashboard():

@@ -66,47 +66,83 @@
     <script>
         const group = "{{ group }}";
         const questions = {
-            "Science": [
-                { q: "What is the chemical symbol for water?", options: ["H2O", "O2", "CO2", "H2"] },
-                { q: "What is the speed of light?", options: ["300,000 km/s", "150,000 km/s", "1,000 km/s", "30,000 km/s"] },
-                { q: "Who discovered gravity?", options: ["Newton", "Einstein", "Galileo", "Hawking"] },
-                { q: "What force pulls objects towards Earth?", options: ["Gravity", "Magnetism", "Friction", "Electricity"] },
-                { q: "What process do plants use to make food?", options: ["Photosynthesis", "Respiration", "Fermentation", "Osmosis"] },
-                { q: "What is a negatively charged particle called?", options: ["Electron", "Proton", "Neutron", "Atom"] },
-                { q: "What is the basic unit of life?", options: ["Cell", "DNA", "RNA", "Protein"] },
-                { q: "What gas do we breathe in?", options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Helium"] },
-                { q: "What organ controls the body?", options: ["Brain", "Heart", "Lungs", "Kidneys"] },
-                { q: "Who developed the Theory of Relativity?", options: ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Stephen Hawking"] }
+            "Bio-Maths": [
+                { q: "What is the function of the mitochondria?", options: ["Powerhouse of the cell", "Produces hormones", "Filters blood", "Carries oxygen"] },
+                { q: "Which is a trigonometric function?", options: ["Sin", "Log", "ln", "Exp"] },
+                { q: "What is the SI unit of force?", options: ["Newton", "Joule", "Watt", "Pascal"] },
+                { q: "Which blood group is known as universal donor?", options: ["O Negative", "A Positive", "B Negative", "AB Positive"] },
+                { q: "What is the derivative of sin(x)?", options: ["cos(x)", "-cos(x)", "-sin(x)", "tan(x)"] },
+                { q: "Which organ produces insulin?", options: ["Pancreas", "Liver", "Kidney", "Heart"] },
+                { q: "What is DNA made of?", options: ["Nucleotides", "Amino acids", "Lipids", "Carbohydrates"] },
+                { q: "Which is not a vector quantity?", options: ["Speed", "Velocity", "Acceleration", "Force"] },
+                { q: "What is Avogadro's number?", options: ["6.022 × 10^23", "3.14", "9.8 m/s²", "1.6 × 10^-19"] },
+                { q: "Who is known as the father of genetics?", options: ["Mendel", "Darwin", "Newton", "Einstein"] }
             ],
-            "Commerce": [
+            "Science with Computer Science": [
+                { q: "What is the full form of CPU?", options: ["Central Processing Unit", "Computer Processing Unit", "Central Performance Unit", "Control Processing Unit"] },
+                { q: "Which data structure uses LIFO?", options: ["Stack", "Queue", "Array", "Tree"] },
+                { q: "What is the output of 2 ** 3 in Python?", options: ["8", "6", "9", "5"] },
+                { q: "Which device connects computers to the internet?", options: ["Router", "Scanner", "Printer", "Monitor"] },
+                { q: "What is the binary equivalent of 10?", options: ["1010", "1001", "1111", "1100"] },
+                { q: "Which protocol is used for web pages?", options: ["HTTP", "FTP", "SMTP", "TCP"] },
+                { q: "Who is the founder of Microsoft?", options: ["Bill Gates", "Steve Jobs", "Elon Musk", "Mark Zuckerberg"] },
+                { q: "Which programming language is used in web development?", options: ["HTML", "Python", "C++", "Java"] },
+                { q: "Which component is known as the brain of the computer?", options: ["CPU", "RAM", "Hard Disk", "Motherboard"] },
+                { q: "Which operator is used for comparison in Python?", options: ["==", "+", "*", "&"] }
+            ],
+            "Commerce with Computer Applications": [
+                { q: "Which software is used for accounting?", options: ["Tally", "Photoshop", "Chrome", "Excel"] },
+                { q: "What is HTML used for?", options: ["Web Page Design", "Data Entry", "Calculation", "Banking"] },
+                { q: "Which of the following is a spreadsheet software?", options: ["Excel", "Word", "PowerPoint", "Access"] },
+                { q: "Which component stores data permanently?", options: ["Hard Disk", "RAM", "Cache", "ROM"] },
+                { q: "What is e-commerce?", options: ["Buying/Selling Online", "Learning Online", "Gaming", "Advertising"] },
+                { q: "What is the shortcut for 'Copy'?", options: ["Ctrl+C", "Ctrl+V", "Ctrl+X", "Ctrl+Z"] },
+                { q: "Which is a type of cyber attack?", options: ["Phishing", "Browsing", "Formatting", "Downloading"] },
+                { q: "Which programming language is used in Excel macros?", options: ["VBA", "Python", "Java", "C++"] },
+                { q: "What is the full form of LAN?", options: ["Local Area Network", "Large Area Network", "Long Access Node", "Logical Area Network"] },
+                { q: "Which software helps create presentations?", options: ["PowerPoint", "Word", "Excel", "Outlook"] }
+            ],
+            "Pure Commerce": [
                 { q: "What is the full form of GDP?", options: ["Gross Domestic Product", "Global Domestic Product", "Gross Development Plan", "General Domestic Price"] },
-                { q: "What is the main function of RBI?", options: ["Regulating the economy", "Controlling inflation", "Printing money", "All of the above"] },
                 { q: "What is a financial statement showing assets and liabilities called?", options: ["Balance Sheet", "Income Statement", "Cash Flow Statement", "Ledger"] },
-                { q: "Which of these is a liability?", options: ["Loan Payable", "Cash", "Equipment", "Inventory"] },
-                { q: "What determines market prices?", options: ["Demand and Supply", "Government Policy", "Stock Market", "Bank Rates"] },
-                { q: "Which tax is levied on an individual’s earnings?", options: ["Income Tax", "Sales Tax", "GST", "Corporate Tax"] },
-                { q: "What term refers to a general increase in prices over time?", options: ["Inflation", "Deflation", "Recession", "Stagnation"] },
-                { q: "What is the primary purpose of the stock market?", options: ["Raising capital for companies", "Government regulation", "Providing fixed incomes", "Managing inflation"] },
-                { q: "Which policy is related to government spending and taxation?", options: ["Fiscal Policy", "Monetary Policy", "Trade Policy", "Stock Policy"] },
-                { q: "Which institution regulates banking in India?", options: ["Reserve Bank of India", "State Bank of India", "World Bank", "SEBI"] }
+                { q: "Which tax is levied on income?", options: ["Income Tax", "Sales Tax", "GST", "Service Tax"] },
+                { q: "Which of the following is an expense?", options: ["Rent Paid", "Sales", "Capital", "Asset"] },
+                { q: "Which of the following is a current asset?", options: ["Cash", "Building", "Machinery", "Furniture"] },
+                { q: "What is double-entry bookkeeping?", options: ["Debit & Credit", "One-sided entry", "Tax entry", "None"] },
+                { q: "Who issues currency in India?", options: ["RBI", "SBI", "Finance Ministry", "NABARD"] },
+                { q: "What does 'Liability' mean?", options: ["Amount payable", "Amount receivable", "Profit", "Sales"] },
+                { q: "Which document is used to record sales?", options: ["Invoice", "Receipt", "Voucher", "Bill"] },
+                { q: "What is the accounting equation?", options: ["Assets = Liabilities + Capital", "Assets = Liabilities", "Profit = Revenue - Cost", "Capital = Assets - Liabilities"] }
             ],
-            "Arts": [
-                { q: "Who painted the Mona Lisa?", options: ["Leonardo da Vinci", "Picasso", "Van Gogh", "Michelangelo"] },
-                { q: "Which Shakespeare play features 'To be or not to be'?", options: ["Hamlet", "Macbeth", "Romeo and Juliet", "Othello"] },
-                { q: "The Renaissance was a period of?", options: ["Cultural Revival", "Scientific Revolution", "Political Upheaval", "Industrial Growth"] },
-                { q: "Who is known as the Bard of Avon?", options: ["Shakespeare", "Chaucer", "Keats", "Tennyson"] },
-                { q: "Which art movement focuses on emotions rather than reality?", options: ["Abstract Art", "Realism", "Surrealism", "Cubism"] },
-                { q: "Which literary movement focused on everyday life?", options: ["Realism", "Romanticism", "Modernism", "Gothic"] },
-                { q: "Which painter created 'Starry Night'?", options: ["Van Gogh", "Monet", "Da Vinci", "Matisse"] },
-                { q: "A poem in which a single speaker expresses deep emotions is called?", options: ["Dramatic Monologue", "Sonnet", "Epic", "Haiku"] },
-                { q: "Which art movement includes dream-like imagery?", options: ["Surrealism", "Impressionism", "Baroque", "Minimalism"] },
-                { q: "Which mythology inspired many classical artworks?", options: ["Greek Mythology", "Egyptian Mythology", "Hindu Mythology", "Norse Mythology"] }
+            "Arts with Computer Applications": [
+                { q: "What is used to design posters digitally?", options: ["Canva", "Excel", "Word", "PowerPoint"] },
+                { q: "Which software is for creating animations?", options: ["Blender", "Tally", "Notepad", "Excel"] },
+                { q: "Who painted the Starry Night?", options: ["Van Gogh", "Picasso", "Da Vinci", "Matisse"] },
+                { q: "Which tool is used in digital painting?", options: ["Stylus", "Joystick", "Scanner", "Printer"] },
+                { q: "Which of these is an art movement?", options: ["Cubism", "Capitalism", "Feudalism", "Socialism"] },
+                { q: "Which program is best for writing documents?", options: ["MS Word", "Excel", "Access", "Tally"] },
+                { q: "Which format is used for saving images?", options: ["JPEG", "PDF", "TXT", "MP3"] },
+                { q: "What does GUI stand for?", options: ["Graphical User Interface", "Great User Interaction", "Global UI", "General Utility Interface"] },
+                { q: "Which is a feature of Word Processor?", options: ["Text Formatting", "Gaming", "Emailing", "Accounting"] },
+                { q: "Which website is used to showcase digital art?", options: ["Behance", "Amazon", "Zoom", "LinkedIn"] }
+            ],
+            "Pure Arts": [
+                { q: "Who wrote 'Romeo and Juliet'?", options: ["Shakespeare", "Chaucer", "Wordsworth", "Byron"] },
+                { q: "Which is an Indian classical dance?", options: ["Bharatanatyam", "Hip-Hop", "Salsa", "Breakdance"] },
+                { q: "Which color is made by mixing red and yellow?", options: ["Orange", "Green", "Blue", "Purple"] },
+                { q: "Who painted the Mona Lisa?", options: ["Leonardo da Vinci", "Michelangelo", "Van Gogh", "Rembrandt"] },
+                { q: "Which form of poetry has 14 lines?", options: ["Sonnet", "Haiku", "Epic", "Ode"] },
+                { q: "What is mythology?", options: ["Traditional stories", "Science Fiction", "Math Theories", "Historical Facts"] },
+                { q: "Which writer is known for fables?", options: ["Aesop", "Shakespeare", "Tolstoy", "Homer"] },
+                { q: "Which musical instrument is stringed?", options: ["Violin", "Tabla", "Flute", "Trumpet"] },
+                { q: "Which art is performed on stage?", options: ["Drama", "Poetry", "Painting", "Sculpture"] },
+                { q: "Who is known as the Bard of Avon?", options: ["William Shakespeare", "Robert Frost", "Rabindranath Tagore", "Walt Whitman"] }
             ]
         };
-
+    
         function showQuestions() {
             const questionContainer = document.getElementById("questions");
-
+    
             if (questions[group]) {
                 questions[group].forEach((question, index) => {
                     let qHTML = `<p>${index + 1}. ${question.q}</p>`;
@@ -116,11 +152,12 @@
                     questionContainer.innerHTML += qHTML + "<br>";
                 });
             } else {
-                questionContainer.innerHTML = "<p style='color: red;'>select the group first</p>";
+                questionContainer.innerHTML = "<p style='color: red;'>Please select a valid group before attempting the test.</p>";
             }
         }
-
+    
         document.addEventListener("DOMContentLoaded", showQuestions);
-</script>
+    </script>
+    
 </body>
 </html>
