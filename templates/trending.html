@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Courses & Part-time Jobs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<style>
+    .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        .exam-card {
+            width: 250px;
+            padding: 15px;
+            background: linear-gradient(120deg, #36046b, #2575fc);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, background 0.3s;
+        }
+        .exam-card:hover {
+            background: linear-gradient(120deg, #2575fc, #36046b);
+            transform: scale(1.05);
+        }
+        .back-btn {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        background-color: #ff4d4d; /* Same as Logout button (Red) */
+        color: white;
+        padding: 8px;
+        padding-top: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight:bolder;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        transform: scale(1.1); 
+    }
+</style>
+<body>
+    <strong><a href="javascript:history.back()" class="back-btn">&larr;</a></strong>
+    <h2>Trending Courses & Part-time Jobs</h2>
+    <p>Find the latest trending courses and part-time job opportunities.</p>
+    
+    <h3>Trending Courses</h3><center>
+        <div class="card-container">
+        <a href="https://www.upgrad.com/blog/trending-courses-online/" target="_blank" class="exam-card">Data Science and Big Data Analytics</a><br/>
+        <a href="https://trendnologies.com/most-in-demand-career-courses-in-2025/" target="_blank" class="exam-card">Cybersecurity</a><br/>
+        <a href="https://www.fynd.academy/blog/trending-online-courses" target="_blank" class="exam-card">Artificial Intelligence & Machine Learning</a><br/>
+        <a href="https://www.fynd.academy/blog/trending-online-courses" target="_blank" class="exam-card">Digital Marketing</a><br/>
+        <a href="https://uptaught.com/trending-courses-in-2025/" target="_blank" class="exam-card">Workday HCM Training</a><br/>
+        </div>
+    <h3>Part-Time Job Opportunities</h3>
+        <div class="card-container">
+        <a href="https://workupplace.com/part-time-jobs-for-students/" target="_blank" class="exam-card">Freelance Writing</a> <br/>
+        <a href="https://workupplace.com/part-time-jobs-for-students/" target="_blank" class="exam-card">Virtual Assistance</a> <br/>
+        <a href="https://ideasforstudents.com/part-time-job-ideas-for-students/" target="_blank" class="exam-card">Tutoring</a> <br/>
+        <a href="https://printify.com/blog/part-time-jobs-for-college-students/" target="_blank" class="exam-card">Graphic Design</a> <br/>
+        <a href="https://printify.com/blog/part-time-jobs-for-college-students/" target="_blank" class="exam-card">Print-on-Demand Business</a><br/>
+        </div>
+</body>
+</html>

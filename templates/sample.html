@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Question Papers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .exam-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 300px;
+            transition: transform 0.3s;
+        }
+        .exam-card:hover {
+            transform: scale(1.05);
+        }
+        .exam-card img {
+            width: 100%;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        h2 {
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Sample Question Papers</h2>
+
+    <div class="card-container">
+        <div class="exam-card">
+            <h4>Sample Paper 1</h4>
+            <a href="{{ url_for('static', filename='1.jpg') }}" target="_blank">
+                <img src="{{ url_for('static', filename='1.jpg') }}" alt="Sample Paper 1">
+            </a>
+        </div>
+
+        <div class="exam-card">
+            <h4>Sample Paper 2</h4>
+            <a href="{{ url_for('static', filename='2.jpg') }}" target="_blank">
+                <img src="{{ url_for('static', filename='2.jpg') }}" alt="Sample Paper 2">
+            </a>
+        </div>
+
+        <div class="exam-card">
+            <h4>Sample Paper 3</h4>
+            <a href="{{ url_for('static', filename='3.jpg') }}" target="_blank">
+                <img src="{{ url_for('static', filename='3.jpg') }}" alt="Sample Paper 3">
+            </a>
+        </div>
+
+        <div class="exam-card">
+            <h4>Sample Paper 4</h4>
+            <a href="{{ url_for('static', filename='4.jpg') }}" target="_blank">
+                <img src="{{ url_for('static', filename='4.jpg') }}" alt="Sample Paper 4">
+            </a>
+        </div>
+    </div>
+</body>
+</html>

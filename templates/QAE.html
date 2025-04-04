@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantitative Exams</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        .exam-card {
+            width: 250px;
+            padding: 15px;
+            background: linear-gradient(120deg, #36046b, #2575fc);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, background 0.3s;
+        }
+        .exam-card:hover {
+            background: linear-gradient(120deg, #2575fc, #36046b);
+            transform: scale(1.05);
+        }
+        .back-btn {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        background-color: #ff4d4d; /* Same as Logout button (Red) */
+        color: white;
+        padding: 8px;
+        padding-top: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight:bolder;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        transform: scale(1.1); 
+    }
+
+    </style>
+</head>
+<body>
+    <strong><a href="javascript:history.back()" class="back-btn">&larr;</a></strong>
+    <h2>Quantitative Exams</h2>
+    <p>Explore various quantitative exams and access sample question papers.</p>
+
+    <div class="card-container">
+        <a href="https://www.ets.org/gre" class="exam-card" target="_blank">GRE Exam</a>
+        <a href="https://www.gmac.com/gmat" class="exam-card" target="_blank">GMAT Exam</a>
+        <a href="https://www.cat.ac.in" class="exam-card" target="_blank">CAT Exam</a>
+        <a href="https://www.upsc.gov.in" class="exam-card" target="_blank">UPSC CSAT</a>
+        <a href="https://www.indiabix.com/aptitude/questions-and-answers/" class="exam-card" target="_blank">Aptitude Questions</a>
+        <a href="/sample" class="exam-card">Sample Question papers</a>
+    </div>
+</body>
+</html>

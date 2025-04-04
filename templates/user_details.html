@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user[1] }}'s Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .details-container {
+            width: 450px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            margin: 50px auto;
+            text-align: center;
+        }
+        h2 {
+            color: #2575fc;
+        }
+        .info {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .activity-log {
+            margin-top: 20px;
+            text-align: left;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #2575fc;
+            color: white;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #ff4d4d;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="details-container">
+        <h2>{{ user[1] }}'s Details</h2>
+        <p class="info"><strong>ID:</strong> CG{{ user[0] }}</p>
+        <p class="info"><strong>Email:</strong> {{ user[2] }}</p>
+        <p class="info"><strong>Group:</strong> {{ user[3] if user[3] else "Not Assigned" }}</p>
+        <p class="info"><strong>Login Time:</strong> {{ user[4] }}</p>
+        <p class="info"><strong>Activity Count:</strong> {{ activity_count }}</p>
+
+        <div class="activity-log">
+            <h3>Activity Log</h3>
+            <table>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Activity</th>
+                </tr>
+                {% for activity in activities %}
+                <tr>
+                    <td>{{ activity[0] }}</td>
+                    <td>{{ activity[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <a href="javascript:history.back()" class="back-btn">← Back</a>
+    </div>
+
+</body>
+</html>

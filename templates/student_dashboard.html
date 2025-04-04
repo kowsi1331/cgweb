@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Student Dashboard</title>
+</head>
+  <style>
+    .font{
+        color: white;
+    }
+    .logout-btn {
+        position: absolute;
+        width: 10%;
+        top: 10px;
+        right: 20px;
+        background-color: #ff4d4d;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .logout-btn:hover {
+        background-color: #cc0000;
+    }
+    .back-btn {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        background-color: #ff4d4d; /* Same as Logout button (Red) */
+        color: white;
+        padding: 8px;
+        padding-top: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight:bolder;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        transform: scale(1.1); 
+    }
+  </style>
+<body class="font">
+    <strong><a href="javascript:history.back()" class="back-btn">&larr;</a></strong>
+    <a href="/logout">
+        <button class="logout-btn">Logout</button>
+    </a>
+    <h2>Welcome, {{ student.name }}</h2>
+    {% if not student.student_group or student.student_group == "Not Selected" %}
+        <div class="details-form">
+            <h4>Please Select Your +2 Group</h4>
+            <form action="/update_group" method="POST">
+                <label for="group">Select Group:</label>
+                <select name="group" required>
+                    <option value="Science">Science</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Arts">Arts</option>
+                </select>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    {% else %}
+        <h4>Your +2 Group: {{ student.student_group }}</h4>
+    {% endif %}
+
+    <p>Test Score: {{ student.test_score }}</p>
+    
+    <center>
+        <div class="card-container">
+            <a href="/aptitude_test" class="exam-card">Aptitude Test</a><br/>
+            <a href="/courses" class="exam-card">Recommended Courses</a><br/>
+            <a href="/trending" class="exam-card">Trending Courses & Part-time Jobs</a><br/>
+            <a href="/QAE" class="exam-card">Quantitative Exams</a><br/>
+            <a href="/feedback" class="exam-card">Feedback</a><br/>
+        </div>
+    </center>
+</body>
+</html>

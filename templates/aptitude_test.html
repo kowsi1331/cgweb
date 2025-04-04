@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptitude Test</title>
+</head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='apt.css') }}">
+<style>
+    .back-btn {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        background-color: #ff4d4d; /* Same as Logout button (Red) */
+        color: white;
+        padding: 8px;
+        padding-top: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight:bolder;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        transform: scale(1.1); 
+    }
+
+    .font{
+        color: white;
+    }
+    .submit {
+    position: relative; /* Changed from absolute to prevent misalignment */
+    background: linear-gradient(45deg, #ff4d4d, #ff6b6b); /* Gradient effect */
+    color: white;
+    padding: 10px 20px; /* Slightly larger padding for better visibility */
+    border: none;
+    border-radius: 8px; /* Slightly rounder edges */
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.submit:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 10px rgba(255, 77, 77, 0.5); /* Adds a slight glow effect */
+}
+
+</style>
+<body>
+<strong><a href="javascript:history.back()" class="back-btn">&larr;</a></strong>
+    <center><h2 class="font">Aptitude Test</h2></center>
+
+    <p class="font"><strong >Selected Group:</strong> {{ group }}</p>
+
+    <form action="{{ url_for('submit_test') }}" method="post">
+        <input type="hidden" name="group" value="{{ group }}">  <!-- Store group for backend -->
+
+        <div id="questions" class="font"></div>
+
+        <center><button type="submit" class="submit">Submit Test</button></center>
+    </form>
+
+    <script>
+        const group = "{{ group }}";
+        const questions = {
+            "Science": [
+                { q: "What is the chemical symbol for water?", options: ["H2O", "O2", "CO2", "H2"] },
+                { q: "What is the speed of light?", options: ["300,000 km/s", "150,000 km/s", "1,000 km/s", "30,000 km/s"] },
+                { q: "Who discovered gravity?", options: ["Newton", "Einstein", "Galileo", "Hawking"] },
+                { q: "What force pulls objects towards Earth?", options: ["Gravity", "Magnetism", "Friction", "Electricity"] },
+                { q: "What process do plants use to make food?", options: ["Photosynthesis", "Respiration", "Fermentation", "Osmosis"] },
+                { q: "What is a negatively charged particle called?", options: ["Electron", "Proton", "Neutron", "Atom"] },
+                { q: "What is the basic unit of life?", options: ["Cell", "DNA", "RNA", "Protein"] },
+                { q: "What gas do we breathe in?", options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Helium"] },
+                { q: "What organ controls the body?", options: ["Brain", "Heart", "Lungs", "Kidneys"] },
+                { q: "Who developed the Theory of Relativity?", options: ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Stephen Hawking"] }
+            ],
+            "Commerce": [
+                { q: "What is the full form of GDP?", options: ["Gross Domestic Product", "Global Domestic Product", "Gross Development Plan", "General Domestic Price"] },
+                { q: "What is the main function of RBI?", options: ["Regulating the economy", "Controlling inflation", "Printing money", "All of the above"] },
+                { q: "What is a financial statement showing assets and liabilities called?", options: ["Balance Sheet", "Income Statement", "Cash Flow Statement", "Ledger"] },
+                { q: "Which of these is a liability?", options: ["Loan Payable", "Cash", "Equipment", "Inventory"] },
+                { q: "What determines market prices?", options: ["Demand and Supply", "Government Policy", "Stock Market", "Bank Rates"] },
+                { q: "Which tax is levied on an individual’s earnings?", options: ["Income Tax", "Sales Tax", "GST", "Corporate Tax"] },
+                { q: "What term refers to a general increase in prices over time?", options: ["Inflation", "Deflation", "Recession", "Stagnation"] },
+                { q: "What is the primary purpose of the stock market?", options: ["Raising capital for companies", "Government regulation", "Providing fixed incomes", "Managing inflation"] },
+                { q: "Which policy is related to government spending and taxation?", options: ["Fiscal Policy", "Monetary Policy", "Trade Policy", "Stock Policy"] },
+                { q: "Which institution regulates banking in India?", options: ["Reserve Bank of India", "State Bank of India", "World Bank", "SEBI"] }
+            ],
+            "Arts": [
+                { q: "Who painted the Mona Lisa?", options: ["Leonardo da Vinci", "Picasso", "Van Gogh", "Michelangelo"] },
+                { q: "Which Shakespeare play features 'To be or not to be'?", options: ["Hamlet", "Macbeth", "Romeo and Juliet", "Othello"] },
+                { q: "The Renaissance was a period of?", options: ["Cultural Revival", "Scientific Revolution", "Political Upheaval", "Industrial Growth"] },
+                { q: "Who is known as the Bard of Avon?", options: ["Shakespeare", "Chaucer", "Keats", "Tennyson"] },
+                { q: "Which art movement focuses on emotions rather than reality?", options: ["Abstract Art", "Realism", "Surrealism", "Cubism"] },
+                { q: "Which literary movement focused on everyday life?", options: ["Realism", "Romanticism", "Modernism", "Gothic"] },
+                { q: "Which painter created 'Starry Night'?", options: ["Van Gogh", "Monet", "Da Vinci", "Matisse"] },
+                { q: "A poem in which a single speaker expresses deep emotions is called?", options: ["Dramatic Monologue", "Sonnet", "Epic", "Haiku"] },
+                { q: "Which art movement includes dream-like imagery?", options: ["Surrealism", "Impressionism", "Baroque", "Minimalism"] },
+                { q: "Which mythology inspired many classical artworks?", options: ["Greek Mythology", "Egyptian Mythology", "Hindu Mythology", "Norse Mythology"] }
+            ]
+        };
+
+        function showQuestions() {
+            const questionContainer = document.getElementById("questions");
+
+            if (questions[group]) {
+                questions[group].forEach((question, index) => {
+                    let qHTML = `<p>${index + 1}. ${question.q}</p>`;
+                    question.options.forEach(option => {
+                        qHTML += `<input type="radio" name="q${index + 1}" value="${option}" required> ${option}<br>`;
+                    });
+                    questionContainer.innerHTML += qHTML + "<br>";
+                });
+            } else {
+                questionContainer.innerHTML = "<p style='color: red;'>No questions found for this group.</p>";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", showQuestions);
+</script>
+</body>
+</html>

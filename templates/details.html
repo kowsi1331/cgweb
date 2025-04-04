@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .course-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .back-btn {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        background-color: #ff4d4d; /* Same as Logout button (Red) */
+        color: white;
+        padding: 8px;
+        padding-top: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight:bolder;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        transform: scale(1.1); 
+    }
+    </style>
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            let courseName = params.get("course");
+            console.log("Course parameter from URL:", courseName); // Debugging
+
+            const courses = {
+                "B.Sc": {
+                    "description": "Bachelor of Science (B.Sc) is an undergraduate degree focusing on science-related subjects.",
+                    "job_roles": "Lab Technician, Research Assistant, Data Analyst",
+                    "masters": "M.Sc in various specializations"
+                },
+                "B.Com": {
+                    "description": "Bachelor of Commerce (B.Com) is focused on business, accounting, and finance.",
+                    "job_roles": "Accountant, Financial Analyst, Auditor",
+                    "masters": "M.Com, MBA"
+                },
+                "B.Pharm": {
+                    "description": "Bachelor of Pharmacy (B.Pharm) is an undergraduate degree in pharmaceutical sciences, focusing on drug development, production, and dispensing.",
+                    "job_roles": "Pharmacist, Drug Inspector, Clinical Research Associate, Medical Representative",
+                    "masters": "M.Pharm, MBA in Pharmaceutical Management, Pharm.D"
+}
+
+            };
+
+            if (courseName) {
+                courseName = courseName.replace(/_/g, "."); // Convert "BSc" → "B.Sc" (Standardizing)
+                console.log("Formatted course name:", courseName); // Debugging
+
+                if (courses[courseName]) {
+                    document.getElementById("course-title").innerText = courseName;
+                    document.getElementById("course-description").innerText = courses[courseName].description;
+                    document.getElementById("course-jobs").innerText = "Job Roles: " + courses[courseName].job_roles;
+                    document.getElementById("course-masters").innerText = "Further Studies: " + courses[courseName].masters;
+                } else {
+                    console.error("Course not found in dictionary:", courseName);
+                    document.getElementById("course-details").innerHTML = "<p>Course not found!</p>";
+                }
+            } else {
+                console.error("No course parameter found in URL.");
+            }
+        });
+    </script>
+</head>
+<body>
+    <strong><a href="javascript:history.back()" class="back-btn">&larr;</a></strong>
+    <div class="course-container" id="course-details">
+        <h2 id="course-title">Loading...</h2>
+        <p id="course-description"></p>
+        <p id="course-jobs"></p>
+        <p id="course-masters"></p>
+    </div>
+</body>
+</html>

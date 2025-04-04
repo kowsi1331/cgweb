@@ -1,0 +1,104 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(120deg, #36046b, #2575fc);
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Aptitude Test Container */
+.aptitude-container {
+    max-width: 750px;
+    margin: 60px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    text-align: left;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Title */
+.aptitude-container h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #07010e;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* Question Box */
+.question-box {
+    background: rgba(250, 224, 228, 0.8);
+    padding: 18px;
+    border-radius: 15px;
+    border-left: 6px solid #ff477e;
+    transition: 0.3s;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.question-box:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Aligning Questions and Radio Buttons */
+.options {
+    margin-top: 10px;
+}
+
+.options label {
+    display: block;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+    text-align: left;
+    cursor: pointer;
+    font-weight: 500;
+    background: rgba(255, 239, 239, 0.6);
+}
+
+.options label:hover {
+    background: #ff85a1;
+    color: white;
+    transform: scale(1.02);
+}
+
+.options input[type="radio"] {
+    margin-right: 12px;
+
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(45deg, #ff477e, #ff85a1);
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 25px;
+}
+
+.submit-btn:hover {
+    background: #ff3b6d;
+    transform: scale(1.07);
+    box-shadow: 0px 6px 15px rgba(255, 71, 126, 0.5);
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

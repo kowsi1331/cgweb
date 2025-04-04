@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Courses</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        .course-card {
+            width: 250px;
+            padding: 15px;
+            background: linear-gradient(120deg, #36046b, #2575fc);
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, background 0.3s;
+        }
+        .course-card:hover {
+            background: linear-gradient(120deg, #2575fc, #36046b);
+            transform: scale(1.05);
+        }
+        .course-card button {
+            margin-top: 10px;
+            background: white;
+            color: #36046b;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .course-card button:hover {
+            background: #e0e0e0;
+        }
+        .back-btn {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        background-color: #ff4d4d; /* Same as Logout button (Red) */
+        color: white;
+        padding: 8px;
+        padding-top: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight:bolder;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        transform: scale(1.1); 
+    }
+    </style>
+</head>
+<script>
+  function goToCourse(courseName) {
+    window.location.href = "/details?course=" + encodeURIComponent(courseName);
+}
+
+</script>
+
+<body>
+    <strong><a href="javascript:history.back()" class="back-btn">&larr;</a></strong>
+    <h2>Recommended Courses for {{ student.name }}</h2>
+    <p>Your Test Score: {{ student.test_score }}</p>
+
+    <div class="card-container">
+        {% for course in recommended_courses %}
+        <div class="course-card">
+            <h3>{{ course.name }}</h3>
+            <p>{{ course.description }}</p>
+            <button onclick="goToCourse('{{ course.name }}')">Learn More</button>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

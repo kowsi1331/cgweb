@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+        .user-card {
+            width: 250px;
+            padding: 15px;
+            background: linear-gradient(120deg, #36046b, #2575fc);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, background 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .user-card:hover {
+            background: linear-gradient(120deg, #2575fc, #36046b);
+            transform: scale(1.05);
+        }
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background-color: #cc0000;
+        }
+        .font {
+            color: white;
+            text-align: center;
+        }
+        .login-time {
+            font-size: 12px;
+            font-weight: normal;
+            display: block;
+            margin-top: 5px;
+            color: #d1d1d1;
+        }
+        .activity-count {
+            font-size: 12px;
+            font-weight: normal;
+            display: block;
+            margin-top: 5px;
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <a href="/logout">
+        <button class="logout-btn">Logout</button>
+    </a>
+    <div class="font">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+
+            <h3>Registered Users</h3>
+
+            <div class="card-container">
+                {% for user in users %}
+                    <a href="{{ url_for('user_details', user_id=user.id) }}" class="user-card">
+                        {{ user.name }}
+                        <span class="login-time">Last Login: {{ user.login_time or 'Never' }}</span>
+                        <span class="activity-count">Actions: {{ user.activity_count or 0 }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

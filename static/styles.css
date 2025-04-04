@@ -1,0 +1,213 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(120deg, #36046b, #2575fc);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Centering Forms */
+.container {
+    width: 500px;
+    height: 200px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    margin: 100px auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+/* Input Fields */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #2575fc;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(37, 117, 252, 0.5);
+}
+
+/* Buttons */
+button {
+    width: 20%;
+    padding: 14px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    transform: scale(1.05);
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    padding: 15px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 50px;
+    padding-right: 50px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    color: #ffdd57;
+    text-shadow: 0px 0px 8px rgba(255, 221, 87, 0.8);
+}
+
+/* Table Styling */
+table {
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background: #2575fc;
+    color: white;
+}
+
+/* Auth Pages (Login & Signup) */
+.auth-container {
+    width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    margin: 70px auto;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.auth-container:hover {
+    transform: scale(1.03);
+}
+
+.auth-container h2 {
+    color: #2575fc;
+    margin-bottom: 20px;
+}
+
+.auth-container a {
+    color: #2575fc;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+    color: #ff416c;
+}
+
+/* Dashboard */
+.dashboard-container {
+    width: 90%;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px 10px 0 0;
+}
+
+.dashboard-header a {
+    background: #ffdd57;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.dashboard-header a:hover {
+    background: #ffbb00;
+    transform: scale(1.05);
+}
+a {
+    color: black;
+    text-decoration: none;
+}
+.module-card {
+    display: block;
+    width: 250px;
+    padding: 20px;
+    margin: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.module-card:hover {
+    background-color: #e0e0e0;
+}
+.exam-card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+}
+.exam-card {
+    width: 250px;
+    padding: 15px;
+    background: linear-gradient(120deg, #36046b, #2575fc);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, background 0.3s;
+}
+.exam-card:hover {
+    background: linear-gradient(120deg, #2575fc, #36046b);
+    transform: scale(1.05);
+}
