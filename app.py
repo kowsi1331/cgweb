@@ -411,41 +411,66 @@ def recommended_courses():
         
         if student:
             student_name, test_score, student_group = student
-            
-            # Define course recommendations based on score & group
-            if student_group == "Science":
-                if (test_score or  0)>= 80:
-                    courses = [("B.Tech", "Engineering courses in various fields"), ("MBBS", "Medical degree")]
+            test_score = test_score or 0  # Handle NULL scores
+            group = (student_group or "").strip().lower()
+
+            # Recommendations based on group and score
+            if group in ["bio-maths", "science with computer science"]:
+                if test_score >= 80:
+                    courses = [
+                        ("MBBS", "Medical degree for Biology students"),
+                        ("B.Tech", "Engineering in top specializations")
+                    ]
                 else:
-                    courses = [("B.Sc", "Bachelor of Science"), ("B.Pharm", "Pharmacy course")]
-            
-            elif student_group == "Commerce":
-                if (test_score or  0) >= 80:
-                    courses = [("CA", "Chartered Accountancy"), ("MBA", "Business Administration")]
+                    courses = [
+                        ("B.Sc", "Bachelor of Science in your field"),
+                        ("B.Pharm", "Pharmacy and allied health courses")
+                    ]
+
+            elif group in ["commerce with computer applications", "pure commerce"]:
+                if test_score >= 80:
+                    courses = [
+                        ("CA", "Chartered Accountancy"),
+                        ("MBA", "Master of Business Administration")
+                    ]
                 else:
-                    courses = [("B.Com", "Bachelor of Commerce"), ("BBA", "Business Management")]
-            
-            else:  # Arts
-                if (test_score or  0) >= 80:
-                    courses = [("Law", "Legal Studies"), ("Mass Communication", "Journalism & Media")]
+                    courses = [
+                        ("B.Com", "Bachelor of Commerce"),
+                        ("BBA", "Bachelor of Business Administration")
+                    ]
+
+            elif group in ["arts with computer applications", "pure arts"]:
+                if test_score >= 80:
+                    courses = [
+                        ("Law", "Pursue a career in Law and Legal Studies"),
+                        ("Mass Communication", "Media, journalism & communication")
+                    ]
                 else:
-                    courses = [("BA", "Bachelor of Arts"), ("B.Ed", "Education degree")]
-            
+                    courses = [
+                        ("BA", "Bachelor of Arts in various fields"),
+                        ("B.Ed", "Education and teaching program")
+                    ]
+            else:
+                courses = [("General", "Group not identified. Explore common career paths.")]
+
             recommended_courses = [{"name": c[0], "description": c[1]} for c in courses]
-        else:
-            return redirect('/student_dashboard')  # Redirect if student not found
+
+            conn.close()
+            return render_template("courses.html", 
+                                   student={"name": student_name, "test_score": test_score}, 
+                                   recommended_courses=recommended_courses)
         
         conn.close()
+        return redirect('/student_dashboard')
 
-        return render_template("courses.html", 
-                               student={"name": student_name, "test_score": test_score}, 
-                               recommended_courses=recommended_courses)
-    
     return redirect('/login')
 
+
 @app.route('/details')
-def details():
-    return render_template('details.html')
+def course_details():
+    course_name = request.args.get('course', 'Unknown Course')
+    return f"<h1>Details about {course_name}</h1><p>This page will have more info about {course_name} soon.</p>"
+
 
 @app.route('/QAE')
 def quantitative_exams():
