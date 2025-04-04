@@ -467,10 +467,8 @@ def recommended_courses():
 
 
 @app.route('/details')
-def course_details():
-    course_name = request.args.get('course', 'Unknown Course')
-    return f"<h1>Details about {course_name}</h1><p>This page will have more info about {course_name} soon.</p>"
-
+def details():
+    return render_template('details.html')
 
 @app.route('/QAE')
 def quantitative_exams():
