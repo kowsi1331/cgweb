@@ -341,7 +341,8 @@ def submit_test():
         if user_answer == correct:
             score += 1
 
-    submitted_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    submitted_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     print(f"User answers: {user_answers}")
     print(f"Score: {score}")
     try:
