@@ -322,12 +322,22 @@ def submit_test():
 
     group_answers = correct_answers.get(group, {})
     score = 0
-
+    user_answers = {}  
     for i in range(1, 11):
-        user_answer = request.form.get(f"q{i}")
-        correct = group_answers.get(f"q{i}")
+        qid = f"q{i}"
+        user_answer = request.form.get(qid)
+        user_answers[qid] = user_answer
+        correct = group_answers.get(qid)
         if user_answer == correct:
             score += 1
+
+    submitted_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Save in aptitude_results table
+    cursor.execute("""
+        INSERT INTO aptitude_results (user_id, group_name, answers, score, submitted_at)
+        VALUES (?, ?, ?, ?, ?)
+    """, (user_id, group, json.dumps(user_answers), score, submitted_at))
 
     # Degree recommendations (adjust if needed)
     degree_recommendations = {
@@ -360,11 +370,27 @@ def view_test_results():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT question, user_answer, correct_answer FROM aptitude_results WHERE user_id=?", (user_id,))
-    questions = cursor.fetchall()
+    cursor.execute("SELECT group_name, answers FROM aptitude_results WHERE user_id=?", (user_id,))
+    result = cursor.fetchone()
     conn.close()
 
+    if not result:
+        return redirect('/student_dashboard')
+
+    group_name, answers_json = result
+    submitted_answers = json.loads(answers_json)
+
+    correct_answers = { ... }  # Your same correct_answers dict here
+
+    group_correct = correct_answers.get(group_name, {})
+    questions = []
+
+    for qid, user_ans in submitted_answers.items():
+        correct_ans = group_correct.get(qid, "N/A")
+        questions.append((qid.upper(), user_ans, correct_ans))
+
     return render_template('view_test_results.html', questions=questions)
+
 
 @app.route('/admin_dashboard')
 def admin_dashboard():

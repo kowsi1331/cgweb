@@ -69,8 +69,9 @@
     {% else %}
         <h4>Your +2 Group: {{ student.student_group }}</h4>
     {% endif %}
-
+    {% if student.test_score is not none %}
     <p>Test Score: {{ student.test_score if student.test_score is not none else "Not taken yet" }}</p>
+    {% endif %}
     
     <center>
         <div class="card-container">
@@ -82,8 +83,8 @@
             <a href="/QAE" class="exam-card">Quantitative Exams</a><br/>
             <a href="/feedback" class="exam-card">Feedback</a><br/>
             {% if student.test_score is not none %}
-            <a href="/view_test_results" class="exam-card">View Aptitude Test Results</a><br/>
-        {% endif %}
+            <a href="/view_test_results" class="exam-card">View Result</a><br/>
+            {% endif %}
         </div>
     </center>
 </body>
