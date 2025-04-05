@@ -26,9 +26,6 @@ def get_db_connection():
     return conn
 
 # ✅ Default Page
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 @app.route('/update_group', methods=['POST'])
 def update_group():
