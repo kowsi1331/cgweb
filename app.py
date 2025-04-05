@@ -7,10 +7,6 @@ import re
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
-
 def update_login_time(user_id):
     conn = sqlite3.connect('career.db')
     cursor = conn.cursor()
@@ -26,6 +22,9 @@ def get_db_connection():
     return conn
 
 # ✅ Default Page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/update_group', methods=['POST'])
 def update_group():
