@@ -334,10 +334,10 @@ def submit_test():
     submitted_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     # Save in aptitude_results table
-    cursor.execute("""
-        INSERT INTO aptitude_results (user_id, group_name, answers, score, submitted_at)
-        VALUES (?, ?, ?, ?, ?)
-    """, (user_id, group, json.dumps(user_answers), score, submitted_at))
+    cursor.execute(
+    "INSERT INTO aptitude_results (user_id, group_name, answers, score, time_taken, submitted_at) VALUES (?, ?, ?, ?, ?, ?)",
+    (user_id, group, json.dumps(user_answers), score, 0, submitted_at)
+)
 
     # Degree recommendations (adjust if needed)
     degree_recommendations = {
@@ -353,9 +353,9 @@ def submit_test():
 
     # Store result in DB
     cursor.execute(
-        "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
-        (score, recommended_degrees, user_id)
-    )
+    "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
+    (score, recommended_degrees, user_id)
+)
     conn.commit()
     conn.close()
 
