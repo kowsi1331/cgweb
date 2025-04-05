@@ -235,14 +235,24 @@ def aptitude_test():
 @app.route('/submit_test', methods=['POST'])
 def submit_test():
     if 'user_id' not in session:
+        print("No user in session")
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+    print(f"User ID: {user_id}")
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Get student group
     cursor.execute("SELECT student_group FROM users WHERE id=?", (user_id,))
-    group = cursor.fetchone()[0]
+    row = cursor.fetchone()
+    if not row:
+        print("No user found in DB.")
+        return redirect(url_for('student_dashboard'))
+
+    group = row[0]
+    print(f"Student group: {group}")
 
     # Correct answers matching the frontend test
     correct_answers = {
@@ -332,15 +342,15 @@ def submit_test():
             score += 1
 
     submitted_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-    # Save in aptitude_results table
-    cursor.execute(
-    "INSERT INTO aptitude_results (user_id, group_name, answers, score, time_taken, submitted_at) VALUES (?, ?, ?, ?, ?, ?)",
-    (user_id, group, json.dumps(user_answers), score, 0, submitted_at)
-)
-
-    # Degree recommendations (adjust if needed)
-    degree_recommendations = {
+    print(f"User answers: {user_answers}")
+    print(f"Score: {score}")
+    try:
+        cursor.execute(
+            "INSERT INTO aptitude_results (user_id, group_name, answers, score, time_taken, submitted_at) VALUES (?, ?, ?, ?, ?, ?)",
+            (user_id, group, json.dumps(user_answers), score, 0, submitted_at))
+        
+        print("Inserted into aptitude_results.")
+        degree_recommendations = {
         "Bio-Maths": ["MBBS", "BDS", "B.Pharm", "B.Tech Biotechnology"],
         "Science with Computer Science": ["B.Tech IT", "B.Sc Computer Science", "BCA"],
         "Commerce with Computer Applications": ["B.Com CA", "BBA", "B.Com IT"],
@@ -348,16 +358,16 @@ def submit_test():
         "Arts with Computer Applications": ["BA English", "BA Journalism", "BFA"],
         "Pure Arts": ["BA History", "BA Political Science", "BA Literature"]
     }
-
-    recommended_degrees = ", ".join(degree_recommendations.get(group, []))
-
-    # Store result in DB
-    cursor.execute(
-    "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
-    (score, recommended_degrees, user_id)
-)
-    conn.commit()
-    conn.close()
+        recommended_degrees = ", ".join(degree_recommendations.get(group, []))
+        cursor.execute(
+        "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
+        (score, recommended_degrees, user_id))
+        conn.commit()
+        ("Committed changes.")
+    except Exception as e:
+        print("Error inserting into DB:", e)
+    finally:
+        conn.close()
 
     return redirect(url_for('student_dashboard'))
 
@@ -375,7 +385,8 @@ def view_test_results():
     conn.close()
 
     if not result:
-        return redirect('/student_dashboard')
+        return "No test results found for user ID: {}".format(user_id)
+
 
     group_name, answers_json = result
     submitted_answers = json.loads(answers_json)
