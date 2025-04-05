@@ -380,7 +380,7 @@ def view_test_results():
     group_name, answers_json = result
     submitted_answers = json.loads(answers_json)
 
-      correct_answers = {
+    correct_answers = {
         "Bio-Maths": {
             "q1": "Powerhouse of the cell",
             "q2": "Sin",
