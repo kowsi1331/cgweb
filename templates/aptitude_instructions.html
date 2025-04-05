@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aptitude Test - Instructions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .instruction-box {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #ff6b6b;
+        }
+        ul {
+            margin-top: 20px;
+        }
+        .btn {
+            display: block;
+            text-align: center;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 12px 20px;
+            margin: 30px auto 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #cc4b4b;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="/student_dashboard" class="back-btn">&larr; Back</a>
+
+    <div class="instruction-box">
+        <h2>Instructions for the Aptitude Test</h2>
+        <ul>
+            <li>This test contains 10 multiple-choice questions.</li>
+            <li>Questions are based on your selected +2 group.</li>
+            <li>Each question has only one correct answer.</li>
+            <li>You cannot go back once you submit the test.</li>
+            <li>Make sure to answer all questions before submitting.</li>
+        </ul>
+        <a class="btn" href="{{ url_for('aptitude_test') }}">Proceed to Test</a>
+    </div>
+
+</body>
+</html>

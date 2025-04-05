@@ -190,6 +190,12 @@ def student_dashboard():
 
     return redirect(url_for('login'))
 
+@app.route('/aptitude_instructions')
+def aptitude_instructions():
+    if 'user_id' not in session:
+        return redirect('/login')
+    return render_template('aptitude_instructions.html')
+
 @app.route('/aptitude_test')
 def aptitude_test():
     if 'user_id' not in session:
