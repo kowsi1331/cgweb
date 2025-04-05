@@ -346,9 +346,9 @@ def submit_test():
     print(f"Score: {score}")
     try:
         cursor.execute(
-            "INSERT INTO aptitude_results (user_id, group_name, answers, score, time_taken, submitted_at) VALUES (?, ?, ?, ?, ?, ?)",
-            (user_id, group, json.dumps(user_answers), score, 0, submitted_at))
-        
+        "INSERT INTO aptitude_results (user_id, group_name, answers, score, time_taken, submitted_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (user_id, group, json.dumps(user_answers), score, 0, submitted_at)
+    )
         print("Inserted into aptitude_results.")
         degree_recommendations = {
         "Bio-Maths": ["MBBS", "BDS", "B.Pharm", "B.Tech Biotechnology"],
@@ -361,13 +361,14 @@ def submit_test():
         recommended_degrees = ", ".join(degree_recommendations.get(group, []))
         cursor.execute(
         "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
-        (score, recommended_degrees, user_id))
+        (score, recommended_degrees, user_id)
+    )
         conn.commit()
-        ("Committed changes.")
+        print("Committed changes.")  # ✅ This line was missing `print()`
     except Exception as e:
         print("Error inserting into DB:", e)
     finally:
-        conn.close()
+        conn.close()    
 
     return redirect(url_for('student_dashboard'))
 
