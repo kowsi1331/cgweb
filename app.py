@@ -223,6 +223,7 @@ def aptitude_test():
 
     if not result or not result[0]:
         conn.close()
+        print("DEBUG: No group found for user")
         return render_template('aptitude_test.html', group="", error="No group selected. Please update your group in the dashboard.")
 
     student_group = result[0]
@@ -233,10 +234,11 @@ def aptitude_test():
     conn.close()
 
     if test_result:
-        # Redirect or show message if test already submitted
-        return render_template('test_already_taken.html')  # Create this template for better UX
+        return render_template('test_already_taken.html')
 
+    print(f"DEBUG: Rendering aptitude test for group: {student_group}")
     return render_template('aptitude_test.html', group=student_group)
+
 
 @app.route('/submit_test', methods=['POST'])
 def submit_test():
