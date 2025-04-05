@@ -5,53 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Student Dashboard</title>
+    <style>
+        .font {
+            color: white;
+        }
+        .logout-btn {
+            position: absolute;
+            width: 10%;
+            top: 10px;
+            right: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .logout-btn:hover {
+            background-color: #cc0000;
+        }
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px;
+            padding-top: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bolder;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            transform: scale(1.1); 
+        }
+    </style>
 </head>
-  <style>
-    .font{
-        color: white;
-    }
-    .logout-btn {
-        position: absolute;
-        width: 10%;
-        top: 10px;
-        right: 20px;
-        background-color: #ff4d4d;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .logout-btn:hover {
-        background-color: #cc0000;
-    }
-    .back-btn {
-        position: absolute;
-        top: 10px;
-        left: 20px;
-        background-color: #ff4d4d; /* Same as Logout button (Red) */
-        color: white;
-        padding: 8px;
-        padding-top: 2px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight:bolder;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-    .back-btn:hover {
-        transform: scale(1.1); 
-    }
-  </style>
 <body class="font">
-    <a href="/logout">
-        <button class="logout-btn">Logout</button>
-    </a>
+    <a href="/logout"><button class="logout-btn">Logout</button></a>
+
     <h2>Welcome, {{ student.name }}</h2>
+
     {% if not student.student_group or student.student_group == "Not Selected" %}
     <div class="details-form">
         <h4>Please Select Your +2 Group</h4>
@@ -68,15 +66,17 @@
             <button type="submit">Save</button>
         </form>
     </div>
-{% else %}
-    <h4>Your +2 Group: {{ student.student_group }}</h4>
-{% endif %}
+    {% else %}
+        <h4>Your +2 Group: {{ student.student_group }}</h4>
+    {% endif %}
 
-    <p>Test Score: {{ student.test_score }}</p>
+    <p>Test Score: {{ student.test_score if student.test_score is not none else "Not taken yet" }}</p>
     
     <center>
         <div class="card-container">
-            <a href="/aptitude_instructions" class="exam-card">Aptitude Test</a><br/>
+            {% if student.test_score is none %}
+                <a href="/aptitude_instructions" class="exam-card">Aptitude Test</a><br/>
+            {% endif %}
             <a href="/courses" class="exam-card">Recommended Courses</a><br/>
             <a href="/trending" class="exam-card">Trending Courses & Part-time Jobs</a><br/>
             <a href="/QAE" class="exam-card">Quantitative Exams</a><br/>

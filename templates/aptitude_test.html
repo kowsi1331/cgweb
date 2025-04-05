@@ -1,67 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aptitude Test</title>
-</head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aptitude Test</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='apt.css') }}">
-<style>
+  <style>
     .back-btn {
-        position: absolute;
-        top: 10px;
-        left: 20px;
-        background-color: #ff4d4d; /* Same as Logout button (Red) */
-        color: white;
-        padding: 8px;
-        padding-top: 2px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight:bolder;
-        text-decoration: none;
-        transition: 0.3s;
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      background-color: #ff4d4d;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bolder;
+      text-decoration: none;
+      transition: 0.3s;
     }
 
     .back-btn:hover {
-        transform: scale(1.1); 
+      transform: scale(1.1);
     }
 
-    .font{
-        color: white;
+    .font {
+      color: white;
     }
+
     .submit {
-    position: relative; /* Changed from absolute to prevent misalignment */
-    background: linear-gradient(45deg, #ff4d4d, #ff6b6b); /* Gradient effect */
-    color: white;
-    padding: 10px 20px; /* Slightly larger padding for better visibility */
-    border: none;
-    border-radius: 8px; /* Slightly rounder edges */
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-    transition: transform 0.3s ease, background 0.3s ease;
-}
+      position: relative;
+      background: linear-gradient(45deg, #ff4d4d, #ff6b6b);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
 
-.submit:hover {
-    transform: scale(1.1);
-    box-shadow: 0px 4px 10px rgba(255, 77, 77, 0.5); /* Adds a slight glow effect */
-}
+    .submit:hover {
+      transform: scale(1.1);
+      box-shadow: 0px 4px 10px rgba(255, 77, 77, 0.5);
+    }
 
-</style>
+    .timer {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      background-color: #000;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 18px;
+      z-index: 1000;
+    }
+  </style>
+</head>
 <body>
-<strong><a href="/aptitude_instructions" class="back-btn">&larr;</a></strong>
-    <center><h2 class="font">Aptitude Test</h2></center>
+  <strong><a href="/aptitude_instructions" class="back-btn">&larr;</a></strong>
+  <div class="timer" id="timer">10:00</div>
 
-    <p class="font"><strong >Selected Group:</strong> {{ group }}</p>
+  <center><h2 class="font">Aptitude Test</h2></center>
+  <p class="font"><strong>Selected Group:</strong> {{ group }}</p>
 
-    <form action="{{ url_for('submit_test') }}" method="post">
-        <input type="hidden" name="group" value="{{ group }}">  <!-- Store group for backend -->
-
-        <div id="questions" class="font"></div>
-
-        <center><button type="submit" class="submit">Submit Test</button></center>
-    </form>
+  <form action="{{ url_for('submit_test') }}" method="post" id="testForm">
+    <input type="hidden" name="group" value="{{ group }}">
+    <div id="questions" class="font"></div>
+    <center><button type="submit" class="submit">Submit Test</button></center>
+  </form>
 
     <script>
         const group = "{{ group }}";
@@ -140,23 +150,48 @@
             ]
         };
     
-        function showQuestions() {
-            const questionContainer = document.getElementById("questions");
-    
-            if (questions[group]) {
-                questions[group].forEach((question, index) => {
-                    let qHTML = `<p>${index + 1}. ${question.q}</p>`;
-                    question.options.forEach(option => {
-                        qHTML += `<input type="radio" name="q${index + 1}" value="${option}" required> ${option}<br>`;
-                    });
-                    questionContainer.innerHTML += qHTML + "<br>";
-                });
-            } else {
-                questionContainer.innerHTML = "<p style='color: red;'>Please select a valid group before attempting the test.</p>";
-            }
+       
+    function showQuestions() {
+      const container = document.getElementById("questions");
+      if (questions[group]) {
+        questions[group].forEach((question, i) => {
+          let html = `<p>${i + 1}. ${question.q}</p>`;
+          question.options.forEach(option => {
+            html += `<input type="radio" name="q${i + 1}" value="${option}" required> ${option}<br>`;
+          });
+          container.innerHTML += html + "<br>";
+        });
+      } else {
+        container.innerHTML = "<p style='color: red;'>Please select a valid group before attempting the test.</p>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showQuestions();
+
+      // Timer
+      let timeLeft = 10 * 60; // 10 minutes in seconds
+      const timerDisplay = document.getElementById("timer");
+
+      function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      }
+
+      const countdown = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+
+        if (timeLeft <= 0) {
+          clearInterval(countdown);
+          alert("Time's up! Your test is being submitted.");
+          document.getElementById("testForm").submit();
         }
-    
-        document.addEventListener("DOMContentLoaded", showQuestions);
+      }, 1000);
+
+      updateTimer();
+    });
     </script>
     
 </body>

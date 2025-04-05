@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Already Taken</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 100px;
+        }
+        .msg-box {
+            background-color: #fff;
+            display: inline-block;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #333;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="msg-box">
+        <h2>You have already completed the aptitude test.</h2>
+        <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>
