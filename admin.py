@@ -41,6 +41,16 @@ CREATE TABLE IF NOT EXISTS feedback (
     message TEXT NOT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+    CREATE TABLE aptitude_results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    group_name TEXT,
+    answers TEXT,
+    score INTEGER,
+    time_taken INTEGER,
+    submitted_at TEXT
+);
+
 """)
 
     conn.commit()
