@@ -380,7 +380,81 @@ def view_test_results():
     group_name, answers_json = result
     submitted_answers = json.loads(answers_json)
 
-    correct_answers = { ... }  # Your same correct_answers dict here
+      correct_answers = {
+        "Bio-Maths": {
+            "q1": "Powerhouse of the cell",
+            "q2": "Sin",
+            "q3": "Newton",
+            "q4": "O Negative",
+            "q5": "cos(x)",
+            "q6": "Pancreas",
+            "q7": "Nucleotides",
+            "q8": "Speed",
+            "q9": "6.022 × 10^23",
+            "q10": "Mendel"
+        },
+        "Science with Computer Science": {
+            "q1": "Central Processing Unit",
+            "q2": "Stack",
+            "q3": "8",
+            "q4": "Router",
+            "q5": "1010",
+            "q6": "HTTP",
+            "q7": "Bill Gates",
+            "q8": "HTML",
+            "q9": "CPU",
+            "q10": "=="
+        },
+        "Commerce with Computer Applications": {
+            "q1": "Tally",
+            "q2": "Web Page Design",
+            "q3": "Excel",
+            "q4": "Hard Disk",
+            "q5": "Buying/Selling Online",
+            "q6": "Ctrl+C",
+            "q7": "Phishing",
+            "q8": "VBA",
+            "q9": "Local Area Network",
+            "q10": "PowerPoint"
+        },
+        "Pure Commerce": {
+            "q1": "Gross Domestic Product",
+            "q2": "Balance Sheet",
+            "q3": "Income Tax",
+            "q4": "Rent Paid",
+            "q5": "Cash",
+            "q6": "Debit & Credit",
+            "q7": "RBI",
+            "q8": "Amount payable",
+            "q9": "Invoice",
+            "q10": "Assets = Liabilities + Capital"
+        },
+        "Arts with Computer Applications": {
+            "q1": "Canva",
+            "q2": "Blender",
+            "q3": "Van Gogh",
+            "q4": "Stylus",
+            "q5": "Cubism",
+            "q6": "MS Word",
+            "q7": "JPEG",
+            "q8": "Graphical User Interface",
+            "q9": "Text Formatting",
+            "q10": "Behance"
+        },
+        "Pure Arts": {
+            "q1": "Shakespeare",
+            "q2": "Bharatanatyam",
+            "q3": "Orange",
+            "q4": "Leonardo da Vinci",
+            "q5": "Sonnet",
+            "q6": "Traditional stories",
+            "q7": "Aesop",
+            "q8": "Violin",
+            "q9": "Drama",
+            "q10": "William Shakespeare"
+        }
+    }
+  # Your same correct_answers dict here
 
     group_correct = correct_answers.get(group_name, {})
     questions = []
