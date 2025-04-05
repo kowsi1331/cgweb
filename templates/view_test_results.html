@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        h2 {
+            color: #ff6b6b;
+        }
+        .question-box {
+            background-color: #1e1e1e;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(255,255,255,0.1);
+        }
+        .correct {
+            color: lightgreen;
+        }
+        .wrong {
+            color: #ff4d4d;
+        }
+        .back-btn {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <a href="/student_dashboard" class="back-btn">&larr; Back to Dashboard</a>
+    <h2>Aptitude Test Results</h2>
+
+    {% for q in questions %}
+    <div class="question-box">
+        <p><strong>Q:</strong> {{ q[0] }}</p>
+        <p><strong>Your Answer:</strong> 
+            {% if q[1] == q[2] %}
+                <span class="correct">{{ q[1] }}</span>
+            {% else %}
+                <span class="wrong">{{ q[1] }}</span>
+            {% endif %}
+        </p>
+        {% if q[1] != q[2] %}
+        <p><strong>Correct Answer:</strong> <span class="correct">{{ q[2] }}</span></p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</body>
+</html>

@@ -148,14 +148,6 @@ def login():
 
     return render_template('login.html')
 
-
-        # Log activity
-    cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user[0], "Logged in"))
-    conn.commit()
-        
-    conn.close()
-    return render_template('login.html')
-
 @app.route('/track_activity/<activity>')
 def track_activity(activity):
     if 'user_id' in session:
@@ -359,6 +351,20 @@ def submit_test():
 
     return redirect(url_for('student_dashboard'))
 
+@app.route('/view_test_results')
+def view_test_results():
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    user_id = session['user_id']
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT question, user_answer, correct_answer FROM aptitude_results WHERE user_id=?", (user_id,))
+    questions = cursor.fetchall()
+    conn.close()
+
+    return render_template('view_test_results.html', questions=questions)
 
 @app.route('/admin_dashboard')
 def admin_dashboard():

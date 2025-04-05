@@ -81,6 +81,9 @@
             <a href="/trending" class="exam-card">Trending Courses & Part-time Jobs</a><br/>
             <a href="/QAE" class="exam-card">Quantitative Exams</a><br/>
             <a href="/feedback" class="exam-card">Feedback</a><br/>
+            {% if student.test_score is not none %}
+            <a href="/view_test_results" class="exam-card">View Aptitude Test Results</a><br/>
+        {% endif %}
         </div>
     </center>
 </body>
