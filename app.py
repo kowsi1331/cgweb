@@ -352,13 +352,50 @@ def submit_test():
     )
         print("Inserted into aptitude_results.")
         degree_recommendations = {
-        "Bio-Maths": ["MBBS", "BDS", "B.Pharm", "B.Tech Biotechnology"],
-        "Science with Computer Science": ["B.Tech IT", "B.Sc Computer Science", "BCA"],
-        "Commerce with Computer Applications": ["B.Com CA", "BBA", "B.Com IT"],
-        "Pure Commerce": ["B.Com", "BBA", "CA Foundation"],
-        "Arts with Computer Applications": ["BA English", "BA Journalism", "BFA"],
-        "Pure Arts": ["BA History", "BA Political Science", "BA Literature"]
-    }
+    "Bio-Maths": [
+        "B.Sc Mathematics", "B.Sc Statistics", "B.Sc Physics", "B.Sc Chemistry",
+        "B.Sc Computer Science", "B.Sc Plant Biology & Plant Biotechnology",
+        "B.Sc Data Science and Artificial Intelligence", "B.Sc (Clinical Nutrition and Dietetics)",
+        "B.Sc (Nutrition Food Service Management and Dietetics)",
+        "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Cognitive Systems",
+        "B.Sc Computer Science with Artificial Intelligence"
+    ],
+
+    "Science with Computer Science": [
+        "B.Sc Computer Science", "B.Sc Mathematics", "B.Sc Statistics", "B.Sc Physics", "B.Sc Chemistry",
+        "B.C.A", "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Artificial Intelligence",
+        "B.Sc Computer Science with Cognitive Systems", "B.Sc Data Science and Artificial Intelligence"
+    ],
+
+    "Commerce with Computer Applications": [
+        "B.Com (Computer Applications)", "B.Com", "B.Com (Corporate Secretaryship)",
+        "B.Com (Banking and Insurance Management)", "B.Com (Information Systems Management)",
+        "B.Com (Professional Accounting)", "B.Com (Honours)", "B.Com Fintech with AI",
+        "B.Com (Accounting and Finance)", "B.B.A", "B.B.A (Digital Marketing and Business Analytics)",
+        "B.C.A", "B.Sc Computer Science", "MBA Business Analytics"
+    ],
+
+    "Pure Commerce": [
+        "B.Com", "B.Com (Corporate Secretaryship)", "B.Com (Banking and Insurance Management)",
+        "B.Com (Information Systems Management)", "B.Com (Professional Accounting)", "B.Com (Honours)",
+        "B.Com Fintech with AI", "B.Com (Accounting and Finance)", "B.B.A",
+        "B.B.A (Digital Marketing and Business Analytics)"
+    ],
+
+    "Arts with Computer Applications": [
+        "B.A. English", "B.A. History and Tourism", "B.A. Economics", "B.C.A", "B.Sc Computer Science",
+        "B.Sc Visual Communication", "B.Sc Psychology", "B.Sc Computer Science with AI",
+        "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Cognitive Systems"
+    ],
+
+    "Pure Arts": [
+        "B.A. English", "B.A. History and Tourism", "B.A. Economics",
+        "B.Voc. (Travel & Tourism)", "B.Sc Visual Communication", "B.Sc Psychology",
+        "B.Sc (Home Science - Clinical Nutrition and Dietetics)",
+        "B.Sc (Home Science - Nutrition Food Service Management and Dietetics)"
+    ]
+}
+
         recommended_degrees = ", ".join(degree_recommendations.get(group, []))
         cursor.execute(
         "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",

@@ -103,7 +103,7 @@
             <div class="card-container">
                 {% for user in users %}
                     <a href="{{ url_for('user_details', user_id=user.id) }}" class="user-card">
-                        {{ user.name }}
+                        {{ user.id }}
                         <span class="login-time">Last Login: {{ user.login_time or 'Never' }}</span>
                         <span class="activity-count">Actions: {{ user.activity_count or 0 }}</span>
                     </a>
