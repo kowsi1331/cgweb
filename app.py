@@ -94,7 +94,7 @@ def signup():
 
         if existing_user:
             conn.close()
-            return render_template('signup.html', error="Email already registered! Please login with same credentials.")
+            return render_template('signup.html', error="Email already registered! Please login with same credentials.", email_registered=True)
 
         # Save user data temporarily in session
         session['pending_user'] = {'name': name, 'email': email, 'password': password}
