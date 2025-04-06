@@ -15,7 +15,7 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 's.kowsalya3103@gmail.com'      # Change to your email
-app.config['MAIL_PASSWORD'] = 'yrp2025'        # Use an App Password
+app.config['MAIL_PASSWORD'] = 'xkho knjf cijn pjzt'        # Use an App Password
 mail = Mail(app)
 
 def update_login_time(user_id):
