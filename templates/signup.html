@@ -45,6 +45,11 @@
     <strong><a href="/" class="back-btn">&larr;</a></strong>
     <div class="auth-container">
         <h2>Signup</h2>
+        {% if error %}
+    <div style="color: red; margin-bottom: 10px; font-weight: bold;">
+        {{ error }}
+    </div>
+{% endif %}
         <form action="/signup" method="POST" onsubmit="return validateSignup()">
             <input type="text" class="size" name="name" placeholder="Full Name" required>
             <input type="email" class="size" id="signup_email" name="email" placeholder="Email" required>

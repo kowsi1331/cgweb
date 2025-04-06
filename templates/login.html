@@ -46,6 +46,11 @@
     <strong><a href="/" class="back-btn">&larr;</a></strong>
     <div class="auth-container">
         <h2>Login</h2>
+        {% if error %}
+    <div style="color: red; margin-bottom: 10px; font-weight: bold;">
+        {{ error }}
+    </div>
+{% endif %}
         <form action="/login" method="POST" onsubmit="return validateLoginForm()">
             <input type="email" class="size" name="email" id="login_email" placeholder="Email" required>
             <input type="password" class="size" name="password" id="login_password" placeholder="Password" required>
