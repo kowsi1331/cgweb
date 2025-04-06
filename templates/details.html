@@ -46,23 +46,68 @@
             console.log("Course parameter from URL:", courseName); // Debugging
 
             const courses = {
-                "B.Sc": {
-                    "description": "Bachelor of Science (B.Sc) is an undergraduate degree focusing on science-related subjects.",
-                    "job_roles": "Lab Technician, Research Assistant, Data Analyst",
-                    "masters": "M.Sc in various specializations"
-                },
-                "B.Com": {
-                    "description": "Bachelor of Commerce (B.Com) is focused on business, accounting, and finance.",
-                    "job_roles": "Accountant, Financial Analyst, Auditor",
-                    "masters": "M.Com, MBA"
-                },
-                "B.Pharm": {
-                    "description": "Bachelor of Pharmacy (B.Pharm) is an undergraduate degree in pharmaceutical sciences, focusing on drug development, production, and dispensing.",
-                    "job_roles": "Pharmacist, Drug Inspector, Clinical Research Associate, Medical Representative",
-                    "masters": "M.Pharm, MBA in Pharmaceutical Management, Pharm.D"
-}
+    "B.Sc Mathematics": {
+        description: "Focuses on mathematical theories, computation, and application of mathematical principles.",
+        job_roles: "Data Analyst, Statistician, Actuary, Quantitative Analyst, Researcher",
+        masters: "M.Sc Mathematics, M.Stat, MBA"
+    },
+    "B.Sc Statistics": {
+        description: "Covers statistical methods, data analysis, and probability theory.",
+        job_roles: "Statistician, Data Scientist, Biostatistician, Business Analyst",
+        masters: "M.Sc Statistics, M.Sc Data Science, MBA"
+    },
+    "B.Sc Physics": {
+        description: "Emphasizes concepts in classical and modern physics, mechanics, and electromagnetism.",
+        job_roles: "Research Assistant, Lab Technician, Radiation Physicist, Data Analyst",
+        masters: "M.Sc Physics, M.Tech Applied Physics"
+    },
+    "B.Sc Chemistry": {
+        description: "Studies chemical composition, structure, and properties of matter.",
+        job_roles: "Chemical Analyst, Lab Technician, Research Chemist, Quality Control Officer",
+        masters: "M.Sc Chemistry, M.Pharm"
+    },
+    "B.Sc Computer Science": {
+        description: "Focuses on programming, algorithms, and computer systems.",
+        job_roles: "Software Developer, Systems Analyst, Web Developer, Data Analyst",
+        masters: "M.Sc Computer Science, MCA"
+    },
+    "B.Sc Plant Biology & Plant Biotechnology": {
+        description: "Covers plant physiology, genetics, molecular biology, and biotechnology applications.",
+        job_roles: "Plant Biotechnologist, Research Associate, Agricultural Scientist",
+        masters: "M.Sc Botany, M.Sc Biotechnology"
+    },
+    "B.Sc Data Science and Artificial Intelligence": {
+        description: "Blends computer science, statistics, and AI to process and analyze data.",
+        job_roles: "Data Scientist, AI Engineer, Machine Learning Engineer, Business Analyst",
+        masters: "M.Sc Data Science, M.Sc AI, MCA"
+    },
+    "B.Sc (Clinical Nutrition and Dietetics)": {
+        description: "Focuses on human nutrition, dietary management, and clinical dietetics.",
+        job_roles: "Clinical Dietitian, Nutritionist, Food Technologist, Health Coach",
+        masters: "M.Sc Clinical Nutrition, M.Sc Dietetics, MPH (Public Health)"
+    },
+    "B.Sc (Nutrition Food Service Management and Dietetics)": {
+        description: "Combines nutrition science with food service management principles.",
+        job_roles: "Dietitian, Food Service Manager, Nutrition Consultant",
+        masters: "M.Sc Nutrition, MBA in Healthcare Management"
+    },
+    "B.Sc Computer Science with Data Science": {
+        description: "Integrates computer science fundamentals with data analysis and big data tools.",
+        job_roles: "Data Analyst, Data Engineer, Software Developer, Business Intelligence Analyst",
+        masters: "M.Sc Data Science, MCA, MBA Analytics"
+    },
+    "B.Sc Computer Science with Cognitive Systems": {
+        description: "Focuses on AI, machine learning, and systems that simulate human cognition.",
+        job_roles: "AI Developer, NLP Engineer, Research Scientist, Cognitive Systems Engineer",
+        masters: "M.Sc AI, M.Sc Cognitive Science, MCA"
+    },
+    "B.Sc Computer Science with Artificial Intelligence": {
+        description: "Specializes in AI, neural networks, robotics, and intelligent system development.",
+        job_roles: "AI Engineer, Machine Learning Developer, Data Scientist, Software Engineer",
+        masters: "M.Sc Artificial Intelligence, MCA, M.Tech AI"
+    }
+};
 
-            };
 
             if (courseName) {
                 courseName = courseName.replace(/_/g, "."); // Convert "BSc" → "B.Sc" (Standardizing)
