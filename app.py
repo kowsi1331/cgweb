@@ -358,7 +358,7 @@ def submit_test():
         "B.Sc Data Science and Artificial Intelligence", "B.Sc (Clinical Nutrition and Dietetics)",
         "B.Sc (Nutrition Food Service Management and Dietetics)",
         "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Cognitive Systems",
-        "B.Sc Computer Science with Artificial Intelligence"
+        "B.Sc Computer Science with Artificial Intelligence","B.C.A"
     ],
 
     "Science with Computer Science": [
@@ -383,7 +383,7 @@ def submit_test():
     ],
 
     "Arts with Computer Applications": [
-        "B.A. English", "B.A. History and Tourism", "B.A. Economics", "B.C.A", "B.Sc Computer Science",
+        "B.A. English", "B.A. History and Tourism", "B.A. Economics","B.Voc. (Travel & Tourism)", "B.C.A", "B.Sc Computer Science",
         "B.Sc Visual Communication", "B.Sc Psychology", "B.Sc Computer Science with AI",
         "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Cognitive Systems"
     ],
@@ -600,49 +600,90 @@ def recommended_courses():
 
             if group == "Bio-Maths":
                 courses = [
-                    "B.Sc Mathematics", "B.Sc Statistics", "B.Sc Physics", "B.Sc Chemistry",
-                    "B.Sc Computer Science", "B.Sc Plant Biology & Plant Biotechnology",
-                    "B.Sc Data Science and Artificial Intelligence", "B.Sc (Clinical Nutrition and Dietetics)",
+                    "B.Sc Mathematics", 
+                    "B.Sc Statistics", 
+                    "B.Sc Physics", 
+                    "B.Sc Chemistry",
+                    "B.Sc Computer Science", 
+                    "B.Sc Plant Biology & Plant Biotechnology",
+                    "B.Sc Data Science and Artificial Intelligence", 
+                    "B.Sc (Clinical Nutrition and Dietetics)",
                     "B.Sc (Nutrition Food Service Management and Dietetics)",
-                    "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Cognitive Systems",
-                    "B.Sc Computer Science with Artificial Intelligence"
+                    "B.Sc Computer Science with Data Science", 
+                    "B.Sc Computer Science with Cognitive Systems",
+                    "B.Sc Computer Science with Artificial Intelligence",
+                    "B.C.A"
                 ]
 
             elif group == "Science with Computer Science":
                 courses = [
-                    "B.Sc Computer Science", "B.Sc Mathematics", "B.Sc Statistics", "B.Sc Physics", "B.Sc Chemistry",
-                    "B.C.A", "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Artificial Intelligence",
-                    "B.Sc Computer Science with Cognitive Systems", "B.Sc Data Science and Artificial Intelligence"
+                    "B.Sc Computer Science", 
+                    "B.Sc Mathematics",
+                    "B.Sc Statistics", 
+                    "B.Sc Physics", 
+                    "B.Sc Chemistry",
+                    "B.C.A", 
+                    "B.Sc Computer Science with Data Science", 
+                    "B.Sc Computer Science with Artificial Intelligence",
+                    "B.Sc Computer Science with Cognitive Systems", 
+                    "B.Sc Data Science and Artificial Intelligence"
                 ]
 
             elif group == "Commerce with Computer Applications":
                 courses = [
-                    "B.Com (Computer Applications)", "B.Com", "B.Com (Corporate Secretaryship)",
-                    "B.Com (Banking and Insurance Management)", "B.Com (Information Systems Management)",
-                    "B.Com (Professional Accounting)", "B.Com (Honours)", "B.Com Fintech with AI",
-                    "B.Com (Accounting and Finance)", "B.B.A", "B.B.A (Digital Marketing and Business Analytics)",
-                    "B.C.A", "B.Sc Computer Science", "MBA Business Analytics"
+                    "B.Com (Computer Applications)", 
+                    "B.Com", 
+                    "B.Com (Corporate Secretaryship)",
+                    "B.Com (Banking and Insurance Management)", 
+                    "B.Com (Information Systems Management)",
+                    "B.Com (Professional Accounting)", 
+                    "B.Com (Honours)", 
+                    "B.Com Fintech with AI",
+                    "B.Com (Accounting and Finance)", 
+                    "B.B.A", 
+                    "B.B.A (Digital Marketing and Business Analytics)",
+                    "B.C.A", 
+                    "B.Sc Computer Science", 
+                    "MBA Business Analytics"
                 ]
 
             elif group == "Pure Commerce":
                 courses = [
-                    "B.Com", "B.Com (Corporate Secretaryship)", "B.Com (Banking and Insurance Management)",
-                    "B.Com (Information Systems Management)", "B.Com (Professional Accounting)", "B.Com (Honours)",
-                    "B.Com Fintech with AI", "B.Com (Accounting and Finance)", "B.B.A",
+                    "B.Com", 
+                    "B.Com (Corporate Secretaryship)", 
+                    "B.Com (Banking and Insurance Management)",
+                    "B.Com (Information Systems Management)", 
+                    "B.Com (Professional Accounting)", 
+                    "B.Com (Honours)",
+                    "B.Com Fintech with AI", 
+                    "B.Com (Accounting and Finance)", 
+                    "B.B.A",
                     "B.B.A (Digital Marketing and Business Analytics)"
                 ]
 
             elif group == "Arts with Computer Applications":
                 courses = [
-                    "B.A. English", "B.A. History and Tourism", "B.A. Economics", "B.C.A", "B.Sc Computer Science",
-                    "B.Sc Visual Communication", "B.Sc Psychology", "B.Sc Computer Science with AI",
-                    "B.Sc Computer Science with Data Science", "B.Sc Computer Science with Cognitive Systems"
+                    "B.A. English", 
+                    "B.A. History and Tourism", 
+                    "B.A. Economics", 
+                    "B.voc. (Travel & Tourism)",
+                    "B.C.A", 
+                    "B.Sc Computer Science",
+                    "B.Sc Visual Communication", 
+                    "B.Sc Psychology", 
+                    "B.Sc Computer Science with AI",
+                    "B.Sc Computer Science with Data Science", 
+                    "B.Sc Computer Science with Cognitive Systems"
                 ]
 
             elif group == "Pure Arts":
                 courses = [
-                    "B.A. English", "B.A. History and Tourism", "B.A. Economics",
-                    "B.Voc. (Travel & Tourism)", "B.Sc Visual Communication", "B.Sc Psychology",
+                    "B.A. English",
+                    "B.A. History and Tourism", 
+                    "B.A. Economics",
+                    "B.Voc. (Travel & Tourism)", 
+                    "B.Sc Visual Communication", 
+                    "B.Sc Psychology",
                     "B.Sc (Home Science - Clinical Nutrition and Dietetics)",
                     "B.Sc (Home Science - Nutrition Food Service Management and Dietetics)"
                 ]

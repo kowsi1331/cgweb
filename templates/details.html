@@ -46,6 +46,7 @@
             console.log("Course parameter from URL:", courseName); // Debugging
 
             const courses = {
+    // === Bio-Maths & Science Related Courses ===
     "B.Sc Mathematics": {
         description: "Focuses on mathematical theories, computation, and application of mathematical principles.",
         job_roles: "Data Analyst, Statistician, Actuary, Quantitative Analyst, Researcher",
@@ -57,54 +58,163 @@
         masters: "M.Sc Statistics, M.Sc Data Science, MBA"
     },
     "B.Sc Physics": {
-        description: "Emphasizes concepts in classical and modern physics, mechanics, and electromagnetism.",
-        job_roles: "Research Assistant, Lab Technician, Radiation Physicist, Data Analyst",
+        description: "Emphasizes classical and modern physics, mechanics, thermodynamics, and electromagnetism.",
+        job_roles: "Research Assistant, Radiation Physicist, Data Analyst",
         masters: "M.Sc Physics, M.Tech Applied Physics"
     },
     "B.Sc Chemistry": {
-        description: "Studies chemical composition, structure, and properties of matter.",
-        job_roles: "Chemical Analyst, Lab Technician, Research Chemist, Quality Control Officer",
+        description: "Studies chemical composition, reactions, and laboratory techniques.",
+        job_roles: "Lab Chemist, Quality Control Officer, Chemical Analyst",
         masters: "M.Sc Chemistry, M.Pharm"
     },
     "B.Sc Computer Science": {
-        description: "Focuses on programming, algorithms, and computer systems.",
-        job_roles: "Software Developer, Systems Analyst, Web Developer, Data Analyst",
-        masters: "M.Sc Computer Science, MCA"
+        description: "Covers programming, data structures, operating systems, and software development.",
+        job_roles: "Software Developer, Systems Analyst, Web Developer",
+        masters: "M.Sc Computer Science, MCA, M.Tech"
     },
     "B.Sc Plant Biology & Plant Biotechnology": {
-        description: "Covers plant physiology, genetics, molecular biology, and biotechnology applications.",
-        job_roles: "Plant Biotechnologist, Research Associate, Agricultural Scientist",
+        description: "Explores plant physiology, biotechnology, and genetics.",
+        job_roles: "Agricultural Scientist, Biotechnologist, Research Associate",
         masters: "M.Sc Botany, M.Sc Biotechnology"
     },
     "B.Sc Data Science and Artificial Intelligence": {
-        description: "Blends computer science, statistics, and AI to process and analyze data.",
-        job_roles: "Data Scientist, AI Engineer, Machine Learning Engineer, Business Analyst",
-        masters: "M.Sc Data Science, M.Sc AI, MCA"
+        description: "Combines data science, AI, and machine learning techniques.",
+        job_roles: "Data Scientist, AI Engineer, Machine Learning Developer",
+        masters: "M.Sc AI, M.Sc Data Science, MCA"
     },
     "B.Sc (Clinical Nutrition and Dietetics)": {
-        description: "Focuses on human nutrition, dietary management, and clinical dietetics.",
-        job_roles: "Clinical Dietitian, Nutritionist, Food Technologist, Health Coach",
-        masters: "M.Sc Clinical Nutrition, M.Sc Dietetics, MPH (Public Health)"
+        description: "Focuses on therapeutic nutrition, clinical diet planning, and health management.",
+        job_roles: "Clinical Dietitian, Nutrition Consultant, Health Coach",
+        masters: "M.Sc Clinical Nutrition, MPH, M.Sc Dietetics"
     },
     "B.Sc (Nutrition Food Service Management and Dietetics)": {
-        description: "Combines nutrition science with food service management principles.",
-        job_roles: "Dietitian, Food Service Manager, Nutrition Consultant",
-        masters: "M.Sc Nutrition, MBA in Healthcare Management"
+        description: "Blends nutrition science with food service operations and dietetics.",
+        job_roles: "Dietitian, Food Service Manager, Nutritionist",
+        masters: "M.Sc Nutrition, MBA Healthcare"
     },
     "B.Sc Computer Science with Data Science": {
-        description: "Integrates computer science fundamentals with data analysis and big data tools.",
-        job_roles: "Data Analyst, Data Engineer, Software Developer, Business Intelligence Analyst",
-        masters: "M.Sc Data Science, MCA, MBA Analytics"
+        description: "Integrates core CS with big data analytics and visualization tools.",
+        job_roles: "Data Analyst, Software Developer, BI Analyst",
+        masters: "M.Sc Data Science, MCA"
     },
     "B.Sc Computer Science with Cognitive Systems": {
-        description: "Focuses on AI, machine learning, and systems that simulate human cognition.",
-        job_roles: "AI Developer, NLP Engineer, Research Scientist, Cognitive Systems Engineer",
-        masters: "M.Sc AI, M.Sc Cognitive Science, MCA"
+        description: "Focuses on intelligent systems that simulate human cognition.",
+        job_roles: "AI Developer, NLP Engineer, Research Scientist",
+        masters: "M.Sc Cognitive Science, MCA, M.Sc AI"
     },
     "B.Sc Computer Science with Artificial Intelligence": {
-        description: "Specializes in AI, neural networks, robotics, and intelligent system development.",
-        job_roles: "AI Engineer, Machine Learning Developer, Data Scientist, Software Engineer",
-        masters: "M.Sc Artificial Intelligence, MCA, M.Tech AI"
+        description: "Specializes in building intelligent systems, robotics, and neural networks.",
+        job_roles: "AI Engineer, ML Developer, Robotics Specialist",
+        masters: "M.Sc AI, M.Tech AI, MCA"
+    },
+    "B.C.A": {
+        description: "Bachelor in Computer Applications – software development and applications.",
+        job_roles: "Software Engineer, Web Developer, System Administrator",
+        masters: "MCA, MBA IT"
+    },
+
+    // === Commerce Related Courses ===
+    "B.Com (Computer Applications)": {
+        description: "Combines commerce fundamentals with computer software and IT knowledge.",
+        job_roles: "Accounts Executive, Software Consultant, Tax Analyst",
+        masters: "M.Com CA, MCA"
+    },
+    "B.Com": {
+        description: "Focus on business, accounting, finance, taxation, and economics.",
+        job_roles: "Accountant, Auditor, Financial Analyst",
+        masters: "M.Com, MBA"
+    },
+    "B.Com (Corporate Secretaryship)": {
+        description: "Emphasizes corporate law, governance, and company secretarial practices.",
+        job_roles: "Company Secretary, Legal Consultant, Compliance Officer",
+        masters: "M.Com, CS"
+    },
+    "B.Com (Banking and Insurance Management)": {
+        description: "Specialized in banking operations, risk management, and insurance.",
+        job_roles: "Bank Officer, Insurance Advisor, Financial Consultant",
+        masters: "MBA Finance, M.Com"
+    },
+    "B.Com (Information Systems Management)": {
+        description: "Commerce combined with IT system management and business tech.",
+        job_roles: "ERP Analyst, System Analyst, Financial Systems Consultant",
+        masters: "M.Com, MBA Systems"
+    },
+    "B.Com (Professional Accounting)": {
+        description: "Advanced accounting techniques and standards in practice.",
+        job_roles: "Chartered Accountant Assistant, Auditor, Tax Consultant",
+        masters: "M.Com PA, CA"
+    },
+    "B.Com (Honours)": {
+        description: "Advanced and in-depth study of accounting and business strategies.",
+        job_roles: "Senior Accountant, Business Analyst, Tax Planner",
+        masters: "M.Com, MBA"
+    },
+    "B.Com Fintech with AI": {
+        description: "Combines commerce, financial technology, and AI tools.",
+        job_roles: "Fintech Analyst, Business Intelligence Developer, Financial Technologist",
+        masters: "MBA Fintech, M.Sc AI"
+    },
+    "B.Com (Accounting and Finance)": {
+        description: "Focus on accounting, auditing, and financial planning.",
+        job_roles: "Accountant, Finance Manager, Investment Analyst",
+        masters: "M.Com AF, MBA"
+    },
+    "B.B.A": {
+        description: "Bachelor of Business Administration – management, marketing, HR basics.",
+        job_roles: "Management Trainee, Sales Executive, HR Associate",
+        masters: "MBA"
+    },
+    "B.B.A (Digital Marketing and Business Analytics)": {
+        description: "Digital marketing strategy combined with business data analytics.",
+        job_roles: "Digital Marketer, Marketing Analyst, SEO Specialist",
+        masters: "MBA Marketing, MBA Business Analytics"
+    },
+    "MBA Business Analytics": {
+        description: "Postgraduate program focused on data-driven decision-making and business intelligence.",
+        job_roles: "Business Analyst, BI Consultant, Data Strategist",
+        masters: "Ph.D. in Business Analytics"
+    },
+
+    // === Arts + Computer Applications / Pure Arts Courses ===
+    "B.A. English": {
+        description: "Focus on English literature, language, writing, and communication skills.",
+        job_roles: "Content Writer, Teacher, Editor, Journalist",
+        masters: "M.A. English, M.Ed"
+    },
+    "B.A. History and Tourism": {
+        description: "Combines historical studies with tourism and heritage management.",
+        job_roles: "Tour Guide, Historian, Travel Executive",
+        masters: "M.A. History, M.Tourism Management"
+    },
+    "B.A. Economics": {
+        description: "Economic theory, development studies, and applied economics.",
+        job_roles: "Economist, Financial Analyst, Researcher",
+        masters: "M.A. Economics, MBA"
+    },
+    "B.Voc. (Travel & Tourism)": {
+        description: "Vocational course for travel, tourism, and hospitality industry.",
+        job_roles: "Travel Consultant, Tour Planner, Hospitality Manager",
+        masters: "MBA Tourism, M.Voc."
+    },
+    "B.Sc Visual Communication": {
+        description: "Visual media production, design, film studies, and animation.",
+        job_roles: "Graphic Designer, Video Editor, Media Executive",
+        masters: "M.Sc Visual Communication, MFA"
+    },
+    "B.Sc Psychology": {
+        description: "Human behavior, cognitive science, and counseling techniques.",
+        job_roles: "Psychologist, Counselor, HR Executive",
+        masters: "M.Sc Psychology, MSW"
+    },
+    "B.Sc (Home Science - Clinical Nutrition and Dietetics)": {
+        description: "Specialized home science with a focus on clinical nutrition.",
+        job_roles: "Dietitian, Nutrition Advisor, Food Service Consultant",
+        masters: "M.Sc Nutrition, MPH"
+    },
+    "B.Sc (Home Science - Nutrition Food Service Management and Dietetics)": {
+        description: "Nutrition and food service techniques for healthcare and hospitality.",
+        job_roles: "Nutrition Consultant, Food Service Officer, Dietitian",
+        masters: "M.Sc Food & Nutrition, MBA Hospitality"
     }
 };
 
