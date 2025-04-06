@@ -76,6 +76,7 @@
 .student-box p {
     margin-top: 15px;
     font-size: 16px;
+    color:#333;
 }
 
 .student-box select,
@@ -92,7 +93,6 @@
     <a href="/logout"><button class="logout-btn">Logout</button></a>
     <div class="student-box">
     <h2>Welcome, {{ student.name }}</h2>
-
     {% if not student.student_group or student.student_group == "Not Selected" %}
     <div class="details-form">
         <h4>Please Select Your +2 Group</h4>
