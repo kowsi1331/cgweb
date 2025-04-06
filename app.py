@@ -4,8 +4,19 @@ import datetime
 import json
 import os
 import re
+from flask_mail import Mail, Message
+import random
+from flask import session
+
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 's.kowsalya3103@gmail.com'      # Change to your email
+app.config['MAIL_PASSWORD'] = 'yrp2025'        # Use an App Password
+mail = Mail(app)
 
 def update_login_time(user_id):
     conn = sqlite3.connect('career.db')
@@ -60,8 +71,6 @@ def update_group():
 
 
 # ✅ Signup Page
-
-
 def is_valid_email(email):
     return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
 
@@ -72,21 +81,14 @@ def signup():
         email = request.form['email']
         password = request.form['password']
 
-        # Email format check
         if not is_valid_email(email):
             return render_template('signup.html', error="Invalid email format!")
 
-        # Password length check
-        if len(password) < 6:
-            return render_template('signup.html', error="Password must be at least 6 characters!")
-
-        # (Optional) Strong password check: at least 1 letter and 1 number
-        if not re.search(r'[A-Za-z]', password) or not re.search(r'\d', password):
-            return render_template('signup.html', error="Password must contain at least one letter and one number!")
+        if len(password) < 6 or not re.search(r'[A-Za-z]', password) or not re.search(r'\d', password):
+            return render_template('signup.html', error="Password must be at least 6 characters and contain a letter and number!")
 
         conn = get_db_connection()
         cursor = conn.cursor()
-
         cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
         existing_user = cursor.fetchone()
 
@@ -94,16 +96,44 @@ def signup():
             conn.close()
             return render_template('signup.html', error="Email already registered!")
 
-        cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 0)", 
-               (name, email, password))
+        # Save user data temporarily in session
+        session['pending_user'] = {'name': name, 'email': email, 'password': password}
 
-        conn.commit()
-        conn.close()
+        # Generate OTP
+        otp = random.randint(100000, 999999)
+        session['otp'] = str(otp)
 
-        return redirect(url_for('login'))
+        # Send OTP email
+        msg = Message("OTP Verification - Career Guidance Platform",
+                      sender="your_email@gmail.com",
+                      recipients=[email])
+        msg.body = f"Hello {name},\n\nYour OTP for verification is: {otp}\n\nThank you!"
+        mail.send(msg)
+
+        return redirect(url_for('verify_otp'))
 
     return render_template('signup.html')
 
+@app.route('/verify_otp', methods=['GET', 'POST'])
+def verify_otp():
+    if request.method == 'POST':
+        entered_otp = request.form['otp']
+        if entered_otp == session.get('otp'):
+            # Retrieve user data and insert into DB
+            user = session.pop('pending_user', None)
+            if user:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 0)",
+                               (user['name'], user['email'], user['password']))
+                conn.commit()
+                conn.close()
+
+                session.pop('otp', None)
+                return redirect(url_for('login'))
+        else:
+            return render_template('verify_otp.html', error="Invalid OTP. Please try again.")
+    return render_template('verify_otp.html')
 
 def log_activity(user_id, activity):
     conn = sqlite3.connect('career.db')
