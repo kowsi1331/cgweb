@@ -115,8 +115,9 @@
     {% if student.test_score is not none %}
     <p>Test Score: {{ student.test_score if student.test_score is not none else "Not taken yet" }}</p>
     {% endif %}
+</div>
     <center>
-    </div>
+ 
         <div class="card-container">
             {% if student.test_score is none %}
                 <a href="/aptitude_instructions" class="exam-card">Aptitude Test</a><br/>
