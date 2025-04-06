@@ -52,11 +52,45 @@
         .back-btn:hover {
             transform: scale(1.1); 
         }
+        .student-box {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.student-box h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.student-box h4 {
+    margin-top: 20px;
+    color: #555;
+}
+
+.student-box p {
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.student-box select,
+.student-box button {
+    margin-top: 10px;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
     </style>
 </head>
 <body class="font">
     <a href="/logout"><button class="logout-btn">Logout</button></a>
-
+    <div class="student-box">
     <h2>Welcome, {{ student.name }}</h2>
 
     {% if not student.student_group or student.student_group == "Not Selected" %}
@@ -81,8 +115,8 @@
     {% if student.test_score is not none %}
     <p>Test Score: {{ student.test_score if student.test_score is not none else "Not taken yet" }}</p>
     {% endif %}
-    
     <center>
+    </div>
         <div class="card-container">
             {% if student.test_score is none %}
                 <a href="/aptitude_instructions" class="exam-card">Aptitude Test</a><br/>
