@@ -14,8 +14,8 @@ app.secret_key = 'your_secret_key'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 's.kowsalya3103@gmail.com'      # Change to your email
-app.config['MAIL_PASSWORD'] = 'xkho knjf cijn pjzt'        # Use an App Password
+app.config['MAIL_USERNAME'] = 'query.careerassistance25@gmail.com'      # Change to your email
+app.config['MAIL_PASSWORD'] = 'rtho txgj rqfm vnyg'        # Use an App Password
 mail = Mail(app)
 
 def update_login_time(user_id):
@@ -73,7 +73,6 @@ def update_group():
 # ✅ Signup Page
 def is_valid_email(email):
     return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -89,12 +88,13 @@ def signup():
 
         conn = get_db_connection()
         cursor = conn.cursor()
+
         cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
         existing_user = cursor.fetchone()
 
         if existing_user:
             conn.close()
-            return render_template('signup.html', error="Email already registered!")
+            return render_template('signup.html', error="Email already registered! Please login with same credentials.")
 
         # Save user data temporarily in session
         session['pending_user'] = {'name': name, 'email': email, 'password': password}
@@ -103,16 +103,24 @@ def signup():
         otp = random.randint(100000, 999999)
         session['otp'] = str(otp)
 
-        # Send OTP email
-        msg = Message("OTP Verification - Career Guidance Platform",
-                      sender="your_email@gmail.com",
-                      recipients=[email])
-        msg.body = f"Hello {name},\n\nYour OTP for verification is: {otp}\n\nThank you!"
-        mail.send(msg)
+        # Email to user with OTP
+        msg_user = Message("OTP Verification - Career Assistance Platform",
+                           sender="query.careerassistance25@gmail.com",  # Replace with your actual email
+                           recipients=[email])
+        msg_user.body = f"Hello {name},\n\nYour OTP for verification is: {otp}\n\nThank you!"
+        mail.send(msg_user)
+
+        # Email to admin notifying signup OTP request
+        msg_admin = Message("New OTP Request - User Signup",
+                            sender="your_email@gmail.com",
+                            recipients=["query.careerassistance25@gmail.com"])
+        msg_admin.body = f"A new OTP was requested during signup.\n\nName: {name}\nEmail: {email}\n\nPlease review if needed."
+        mail.send(msg_admin)
 
         return redirect(url_for('verify_otp'))
 
     return render_template('signup.html')
+
 
 @app.route('/verify_otp', methods=['GET', 'POST'])
 def verify_otp():
@@ -151,30 +159,35 @@ def login():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password))
+
+        # First, check if the email exists
+        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
         user = cursor.fetchone()
 
-        if user:
-            session['user_id'] = user['id']
-            session['is_admin'] = user['is_admin']
-
-            # Update login time
-            login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user['id']))
-
-            # Log activity
-            cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user['id'], "Logged in"))
-
-            conn.commit()
+        if not user:
             conn.close()
+            return render_template('login.html', error="Email not registered!")
 
-            if user['is_admin'] == 1:
-                return redirect(url_for('admin_dashboard'))
-            else:
-                return redirect(url_for('student_dashboard'))
+        # Then check password
+        if user['password'] != password:
+            conn.close()
+            return render_template('login.html', error="Invalid password!")
+
+        # Successful login
+        session['user_id'] = user['id']
+        session['is_admin'] = user['is_admin']
+
+        login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user['id']))
+        cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user['id'], "Logged in"))
+
+        conn.commit()
+        conn.close()
+
+        if user['is_admin'] == 1:
+            return redirect(url_for('admin_dashboard'))
         else:
-            conn.close()
-            return render_template('login.html', error="Invalid email or password")
+            return redirect(url_for('student_dashboard'))
 
     return render_template('login.html')
 
