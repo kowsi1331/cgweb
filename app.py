@@ -712,15 +712,14 @@ def submit_feedback():
     name = request.form['name']
     user_email = request.form['email']
     message = request.form['message']
-    id=request.form['id']
 
     # Store in database
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO feedback (name, email, message,id)
-        VALUES (?, ?, ?, ?)
-    ''', (name, user_email, message,id))
+        INSERT INTO feedback (name, email, message)
+        VALUES (?, ?, ?)
+    ''', (name, user_email, message))
     conn.commit()
 
     # Get the latest inserted feedback with timestamp
@@ -744,7 +743,6 @@ def submit_feedback():
     admin_body = f"""
     📬 New Feedback Received
 
-    ID: {id}
     Name: {name}
     Email: {user_email}
     Message: {message}
@@ -784,7 +782,7 @@ def submit_feedback():
         server.quit()
     except Exception as e:
         print("Error sending email:", e)
-    
+
     return "Thank you for your feedback!"
 
 
