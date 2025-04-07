@@ -45,6 +45,8 @@ CREATE TABLE IF NOT EXISTS feedback (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     group_name TEXT,
+    questions TEXT,
+    correct_answers TEXT,
     answers TEXT,
     score INTEGER,
     time_taken INTEGER,

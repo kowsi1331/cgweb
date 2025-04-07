@@ -378,25 +378,38 @@ def submit_test():
 
     group_answers = correct_answers.get(group, {})
     score = 0
-    user_answers = {}  
+    user_answers = {}
+
     for i in range(1, 11):
         qid = f"q{i}"
-        user_answer = request.form.get(qid)
+        user_answer = request.form.get(qid, "N/A")
         user_answers[qid] = user_answer
-        correct = group_answers.get(qid)
-        if user_answer == correct:
+        if user_answer == group_answers.get(qid):
             score += 1
 
     submitted_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     print(f"User answers: {user_answers}")
     print(f"Score: {score}")
+    
     try:
-        cursor.execute(
-        "INSERT INTO aptitude_results (user_id, group_name, answers, score, time_taken, submitted_at) VALUES (?, ?, ?, ?, ?, ?)",
-        (user_id, group, json.dumps(user_answers), score, 0, submitted_at)
-    )
+        # Save the aptitude result
+        cursor.execute("""
+            INSERT INTO aptitude_results (
+                user_id, group_name, answers, questions, correct_answers, score, time_taken, submitted_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            user_id,
+            group,
+            json.dumps(user_answers),
+            10,
+            json.dumps(group_answers),
+            score,
+            0,  # Time taken (optional enhancement)
+            submitted_at
+        ))
         print("Inserted into aptitude_results.")
+
         degree_recommendations = {
     "Bio-Maths": [
         "B.Sc Mathematics", "B.Sc Statistics", "B.Sc Physics", "B.Sc Chemistry",
@@ -444,15 +457,16 @@ def submit_test():
 
         recommended_degrees = ", ".join(degree_recommendations.get(group, []))
         cursor.execute(
-        "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
-        (score, recommended_degrees, user_id)
-    )
+            "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
+            (score, recommended_degrees, user_id)
+        )
         conn.commit()
-        print("Committed changes.")  # ✅ This line was missing `print()`
+        print("Committed changes.")
+
     except Exception as e:
         print("Error inserting into DB:", e)
     finally:
-        conn.close()    
+        conn.close()
 
     return redirect(url_for('student_dashboard'))
 
@@ -472,9 +486,84 @@ def view_test_results():
     if not result:
         return "No test results found for user ID: {}".format(user_id)
 
-
     group_name, answers_json = result
     submitted_answers = json.loads(answers_json)
+
+    # Map full question text for each group
+    group_questions = {
+        "Bio-Maths": {
+            "q1": "What is the powerhouse of the cell?",
+            "q2": "Which trigonometric function is periodic?",
+            "q3": "Who discovered the laws of motion?",
+            "q4": "Which blood group is called the universal donor?",
+            "q5": "What is the derivative of sin(x)?",
+            "q6": "Which organ secretes insulin?",
+            "q7": "DNA is made up of?",
+            "q8": "What is the SI unit of speed?",
+            "q9": "What is Avogadro’s number?",
+            "q10": "Who is the father of genetics?"
+        },
+        "Science with Computer Science": {
+            "q1": "What does CPU stand for?",
+            "q2": "Which data structure follows LIFO?",
+            "q3": "Binary of decimal 8 is?",
+            "q4": "Which device routes data packets in networks?",
+            "q5": "Binary representation of decimal 10 is?",
+            "q6": "Which protocol is used for web communication?",
+            "q7": "Who founded Microsoft?",
+            "q8": "Which language is used to design web pages?",
+            "q9": "What executes instructions in a computer?",
+            "q10": "Which operator checks equality in Python?"
+        },
+        "Commerce with Computer Applications": {
+            "q1": "Which software is used for accounting?",
+            "q2": "Which is used to design websites?",
+            "q3": "Which MS Office tool is spreadsheet-based?",
+            "q4": "Which is the primary storage device in a computer?",
+            "q5": "What is e-commerce?",
+            "q6": "Shortcut for copy in Windows is?",
+            "q7": "What is an email scam called?",
+            "q8": "Macro language in MS Excel is?",
+            "q9": "LAN stands for?",
+            "q10": "Which software is used for presentations?"
+        },
+        "Pure Commerce": {
+            "q1": "What does GDP stand for?",
+            "q2": "Which document shows assets and liabilities?",
+            "q3": "What type of tax is based on income?",
+            "q4": "What is an example of an expense?",
+            "q5": "What is the most liquid asset?",
+            "q6": "Which two terms are key in accounting?",
+            "q7": "Which body manages India's monetary policy?",
+            "q8": "Outstanding salary is shown as?",
+            "q9": "A bill sent by the seller is called?",
+            "q10": "Basic accounting equation is?"
+        },
+        "Arts with Computer Applications": {
+            "q1": "Which tool is used for graphic design?",
+            "q2": "Which software is used for 3D animation?",
+            "q3": "Who painted 'Starry Night'?",
+            "q4": "What tool is used with a drawing tablet?",
+            "q5": "Which art style uses geometric shapes?",
+            "q6": "Which software is best for document editing?",
+            "q7": "Which image format is widely used?",
+            "q8": "What does GUI stand for?",
+            "q9": "Which feature changes font size and style?",
+            "q10": "Which site is used to showcase portfolios?"
+        },
+        "Pure Arts": {
+            "q1": "Who wrote 'Romeo and Juliet'?",
+            "q2": "Which classical dance originated in Tamil Nadu?",
+            "q3": "Which color is a secondary color?",
+            "q4": "Who painted the Mona Lisa?",
+            "q5": "What is a 14-line poem called?",
+            "q6": "What is folklore?",
+            "q7": "Who is a famous fable writer?",
+            "q8": "Which instrument is used in classical music?",
+            "q9": "What type of performance includes acting?",
+            "q10": "Who is known as the greatest English writer?"
+        }
+    }
 
     correct_answers = {
         "Bio-Maths": {
@@ -550,17 +639,17 @@ def view_test_results():
             "q10": "William Shakespeare"
         }
     }
-  # Your same correct_answers dict here
 
     group_correct = correct_answers.get(group_name, {})
-    questions = []
+    group_q_text = group_questions.get(group_name, {})
 
+    questions = []
     for qid, user_ans in submitted_answers.items():
+        full_q = group_q_text.get(qid, qid.upper())
         correct_ans = group_correct.get(qid, "N/A")
-        questions.append((qid.upper(), user_ans, correct_ans))
+        questions.append((full_q, user_ans, correct_ans))
 
     return render_template('view_test_results.html', questions=questions)
-
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
