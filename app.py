@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, url_for, render_template
+from flask import Flask, request, session, redirect, url_for, render_template,flash
 import sqlite3
 import datetime
 import json
@@ -141,6 +141,9 @@ def verify_otp():
                 return redirect(url_for('login'))
         else:
             return render_template('verify_otp.html', error="Invalid OTP. Please try again.")
+    if 'otp' in session:
+        flash("OTP sent to your email. Please check your inbox or spam folder.")
+
     return render_template('verify_otp.html')
 
 def log_activity(user_id, activity):
