@@ -751,7 +751,7 @@ Email: {user_email}
 Message: {message}
 Submitted on: {feedback_timestamp}
         """
-        admin_msg.attach(MIMEText(admin_body, 'plain'))
+        admin_msg.attach(MIMEText(admin_body, 'plain', _charset='utf-8'))
 
         # --- User Email ---
         user_msg = MIMEMultipart()
@@ -772,7 +772,7 @@ We appreciate your input!
 
 - Career Assistance Team
         """
-        user_msg.attach(MIMEText(user_body, 'plain'))
+        user_msg.attach(MIMEText(user_body, 'plain', _charset='utf-8'))
 
         # Send the emails
         try:
