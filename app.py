@@ -7,7 +7,9 @@ import re
 from flask_mail import Mail, Message
 import random
 from flask import session
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -640,14 +642,18 @@ def view_test_results():
         }
     }
 
-    group_correct = correct_answers.get(group_name, {})
     group_q_text = group_questions.get(group_name, {})
+    group_correct = correct_answers.get(group_name, {})
 
     questions = []
     for qid, user_ans in submitted_answers.items():
-        full_q = group_q_text.get(qid, qid.upper())
+        question_text = group_q_text.get(qid, f"Question ID: {qid}")
         correct_ans = group_correct.get(qid, "N/A")
-        questions.append((full_q, user_ans, correct_ans))
+        questions.append({
+            "question": question_text,
+            "your_answer": user_ans,
+            "correct_answer": correct_ans
+        })
 
     return render_template('view_test_results.html', questions=questions)
 
@@ -699,17 +705,88 @@ def logout():
 def feedback():
     return render_template('feedback.html')
 
+
+
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
     name = request.form['name']
-    email = request.form['email']
+    user_email = request.form['email']
     message = request.form['message']
+    id=request.form['id']
+
+    # Store in database
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('''INSERT INTO feedback (name, email, message) VALUES (?, ?, ?)''', (name, email, message))
+    cursor.execute('''
+        INSERT INTO feedback (name, email, message,id)
+        VALUES (?, ?, ?, ?)
+    ''', (name, user_email, message,id))
     conn.commit()
 
+    # Get the latest inserted feedback with timestamp
+    cursor.execute('SELECT timestamp FROM feedback WHERE email = ? ORDER BY id DESC LIMIT 1', (user_email,))
+    feedback_timestamp = cursor.fetchone()[0]
+    conn.close()
+
+    # Email configuration
+    sender_email = "query.careerassistance@gmail.com"
+    sender_password = "rtho txgj rqfm vnyg"
+    admin_email = "careerassistancefeedback@gmail.com"
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+
+    # Email to admin
+    admin_msg = MIMEMultipart()
+    admin_msg['From'] = sender_email
+    admin_msg['To'] = admin_email
+    admin_msg['Subject'] = "New Feedback Received"
+
+    admin_body = f"""
+    📬 New Feedback Received
+
+    ID: {id}
+    Name: {name}
+    Email: {user_email}
+    Message: {message}
+    Submitted on: {feedback_timestamp}
+    """
+    admin_msg.attach(MIMEText(admin_body, 'plain'))
+
+    # Email to user
+    user_msg = MIMEMultipart()
+    user_msg['From'] = sender_email
+    user_msg['To'] = user_email
+    user_msg['Subject'] = "Thanks for your feedback!"
+
+    user_body = f"""
+    Hi {name},
+
+    Thank you for reaching out to us. We've received your feedback:
+
+    "{message}"
+
+    Submitted on: {feedback_timestamp}
+
+    We appreciate your input!
+
+    - Career Assistance Team
+    """
+    user_msg.attach(MIMEText(user_body, 'plain'))
+
+    try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(sender_email, sender_password)
+
+        server.sendmail(sender_email, admin_email, admin_msg.as_string())
+        server.sendmail(sender_email, user_email, user_msg.as_string())
+
+        server.quit()
+    except Exception as e:
+        print("Error sending email:", e)
+    
     return "Thank you for your feedback!"
+
 
 
 @app.route('/trending')

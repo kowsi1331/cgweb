@@ -1,72 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Test Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
-        body {
-            background-color: #121212;
-            color: white;
-            font-family: Arial, sans-serif;
-            padding: 30px;
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h2 { color: #2c3e50; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        h2 {
-            color: #ff6b6b;
-            text-align: center;
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
         }
-        .question-box {
-            background-color: #1e1e1e;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(255,255,255,0.1);
-        }
-        .correct {
-            color: lightgreen;
-            font-weight: bold;
-        }
-        .wrong {
-            color: #ff4d4d;
-            font-weight: bold;
-        }
-        .label {
-            color: #cccccc;
-            font-weight: bold;
-        }
-        .back-btn {
-            background-color: #ff4d4d;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-        .option {
-            margin-left: 20px;
-        }
+        th { background-color: #f7f7f7; }
+        .correct { color: green; }
+        .incorrect { color: red; }
     </style>
 </head>
 <body>
-    <a href="/student_dashboard" class="back-btn">&larr; Back to Dashboard</a>
-    <h2>Aptitude Test Results</h2>
-
-    {% for q in questions %}
-    <div class="question-box">
-        <p class="label">Question:</p>
-        <p>{{ q[3] }}</p>
-
-        <p class="label">Correct Answer:</p>
-        <p><span class="correct">{{ q[2] }}</span></p>
-
-        <p class="label">Your Answer:</p>
-        {% if q[1] == q[2] %}
-            <p><span class="correct">{{ q[1] }}</span></p>
-        {% else %}
-            <p><span class="wrong">{{ q[1] }}</span></p>
-        {% endif %}
-    </div>
-    {% endfor %}
+    <h2>Your Aptitude Test Results</h2>
+    <table>
+        <tr>
+            <th>Question</th>
+            <th>Your Answer</th>
+            <th>Correct Answer</th>
+        </tr>
+        {% for q in questions %}
+        <tr>
+            <td>{{ q.question }}</td>
+            <td class="{{ 'correct' if q.your_answer == q.correct_answer else 'incorrect' }}">
+                {{ q.your_answer }}
+            </td>
+            <td>{{ q.correct_answer }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
