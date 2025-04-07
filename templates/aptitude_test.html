@@ -140,7 +140,7 @@
           question.options.forEach(option => {
             html += `<input type="radio" name="q${i + 1}" value="${option}" required> ${option}<br>`;
           });
-          container.innerHTML += html + "<br>";
+          container.insertAdjacentHTML('beforeend', html + "<br>");
         });
       } else {
         container.innerHTML = "<p style='color: red;'>Please select a valid group before attempting the test.</p>";
