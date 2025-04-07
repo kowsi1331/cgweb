@@ -775,15 +775,17 @@ def submit_feedback():
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
         server.login(sender_email, sender_password)
-
         server.sendmail(sender_email, admin_email, admin_msg.as_string())
         server.sendmail(sender_email, user_email, user_msg.as_string())
 
         server.quit()
+        print("✅ Emails sent successfully.")
     except Exception as e:
         print("Error sending email:", e)
 
-    return "Thank you for your feedback!"
+    flash("✅ Thank you for your feedback! We've emailed a confirmation to you.", "success")
+    return redirect(url_for('feedback'))
+
 
 
 
