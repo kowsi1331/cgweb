@@ -13,6 +13,7 @@
         }
         h2 {
             color: #ff6b6b;
+            text-align: center;
         }
         .question-box {
             background-color: #1e1e1e;
@@ -23,9 +24,15 @@
         }
         .correct {
             color: lightgreen;
+            font-weight: bold;
         }
         .wrong {
             color: #ff4d4d;
+            font-weight: bold;
+        }
+        .label {
+            color: #cccccc;
+            font-weight: bold;
         }
         .back-btn {
             background-color: #ff4d4d;
@@ -36,6 +43,9 @@
             margin-bottom: 20px;
             display: inline-block;
         }
+        .option {
+            margin-left: 20px;
+        }
     </style>
 </head>
 <body>
@@ -44,16 +54,17 @@
 
     {% for q in questions %}
     <div class="question-box">
-        <p><strong>Q:</strong> {{ q[0] }}</p>
-        <p><strong>Your Answer:</strong> 
-            {% if q[1] == q[2] %}
-                <span class="correct">{{ q[1] }}</span>
-            {% else %}
-                <span class="wrong">{{ q[1] }}</span>
-            {% endif %}
-        </p>
-        {% if q[1] != q[2] %}
-        <p><strong>Correct Answer:</strong> <span class="correct">{{ q[2] }}</span></p>
+        <p class="label">Question:</p>
+        <p>{{ q[3] }}</p>
+
+        <p class="label">Correct Answer:</p>
+        <p><span class="correct">{{ q[2] }}</span></p>
+
+        <p class="label">Your Answer:</p>
+        {% if q[1] == q[2] %}
+            <p><span class="correct">{{ q[1] }}</span></p>
+        {% else %}
+            <p><span class="wrong">{{ q[1] }}</span></p>
         {% endif %}
     </div>
     {% endfor %}
