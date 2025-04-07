@@ -731,8 +731,8 @@ def submit_feedback():
         conn.close()
 
         # Email configuration
-        sender_email = "query.careerassistance@gmail.com"
-        sender_password = "xayx ahbm bzgm ueza"  # App password
+        sender_email = "query.careerassistance25@gmail.com"
+        sender_password = "rtho txgj rqfm vnyg"  # App password
         admin_email = "careerassistancefeedback@gmail.com"
         smtp_server = "smtp.gmail.com"
         smtp_port = 587
