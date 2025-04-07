@@ -744,7 +744,7 @@ def submit_feedback():
         admin_msg['Subject'] = "New Feedback Received"
 
         admin_body = f"""
-📬 New Feedback Received
+ New Feedback Received
 
 Name: {name}
 Email: {user_email}
