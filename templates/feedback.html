@@ -11,6 +11,7 @@
             text-align: center;
             padding: 20px;
         }
+
         .feedback-container {
             max-width: 500px;
             margin: auto;
@@ -19,6 +20,7 @@
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
         }
+
         input, textarea {
             width: 80%;
             padding: 10px;
@@ -26,6 +28,7 @@
             border-radius: 5px;
             border: 1px solid #ccc;
         }
+
         button {
             background: #2575fc;
             color: white;
@@ -35,60 +38,75 @@
             font-weight: bold;
             border-radius: 5px;
         }
+
         button:hover {
             background: #36046b;
         }
+
         .back-btn {
-        position: absolute;
-        top: 10px;
-        left: 20px;
-        background-color: #ff4d4d; /* Same as Logout button (Red) */
-        color: white;
-        padding: 8px;
-        padding-top: 2px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight:bolder;
-        text-decoration: none;
-        transition: 0.3s;
-    }
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px;
+            padding-top: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bolder;
+            text-decoration: none;
+            transition: 0.3s;
+        }
 
-    .back-btn:hover {
-        transform: scale(1.1); 
-    }
-    .flash.success {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #c3e6cb;
-    border-radius: 5px;
-}
+        .back-btn:hover {
+            transform: scale(1.1); 
+        }
 
+        .flash-message {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
     <strong><a href="/student_dashboard" class="back-btn">&larr;</a></strong>
     <div class="feedback-container">
         <h2>Feedback Form</h2>
+
         {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="flash {{ category }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {% if category == 'success' %}flash-success{% else %}flash-error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
 
         <form action="/submit_feedback" method="POST">
-            <label for="name">Your Name:</label>
+            <label for="name">Your Name:</label><br>
             <input type="text" id="name" name="name" required><br/>
             
-            <label for="email">Your Email:</label>
+            <label for="email">Your Email:</label><br>
             <input type="email" id="email" name="email" required><br/>
 
-            <label for="message">Your Feedback:</label>
-            <textarea id="message" name="message" rows="4" required></textarea>
+            <label for="message">Your Feedback:</label><br>
+            <textarea id="message" name="message" rows="4" required></textarea><br/>
 
             <button type="submit">Submit Feedback</button>
         </form>

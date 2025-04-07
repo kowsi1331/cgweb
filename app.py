@@ -707,87 +707,94 @@ def feedback():
 
 
 
+
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
-    name = request.form['name']
-    user_email = request.form['email']
-    message = request.form['message']
-
-    # Store in database
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''
-        INSERT INTO feedback (name, email, message)
-        VALUES (?, ?, ?)
-    ''', (name, user_email, message))
-    conn.commit()
-
-    # Get the latest inserted feedback with timestamp
-    cursor.execute('SELECT timestamp FROM feedback WHERE email = ? ORDER BY id DESC LIMIT 1', (user_email,))
-    feedback_timestamp = cursor.fetchone()[0]
-    conn.close()
-
-    # Email configuration
-    sender_email = "query.careerassistance@gmail.com"
-    sender_password = "rtho txgj rqfm vnyg"
-    admin_email = "careerassistancefeedback@gmail.com"
-    smtp_server = "smtp.gmail.com"
-    smtp_port = 587
-
-    # Email to admin
-    admin_msg = MIMEMultipart()
-    admin_msg['From'] = sender_email
-    admin_msg['To'] = admin_email
-    admin_msg['Subject'] = "New Feedback Received"
-
-    admin_body = f"""
-    📬 New Feedback Received
-
-    Name: {name}
-    Email: {user_email}
-    Message: {message}
-    Submitted on: {feedback_timestamp}
-    """
-    admin_msg.attach(MIMEText(admin_body, 'plain'))
-
-    # Email to user
-    user_msg = MIMEMultipart()
-    user_msg['From'] = sender_email
-    user_msg['To'] = user_email
-    user_msg['Subject'] = "Thanks for your feedback!"
-
-    user_body = f"""
-    Hi {name},
-
-    Thank you for reaching out to us. We've received your feedback:
-
-    "{message}"
-
-    Submitted on: {feedback_timestamp}
-
-    We appreciate your input!
-
-    - Career Assistance Team
-    """
-    user_msg.attach(MIMEText(user_body, 'plain'))
-
     try:
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, admin_email, admin_msg.as_string())
-        server.sendmail(sender_email, user_email, user_msg.as_string())
+        name = request.form['name']
+        user_email = request.form['email']
+        message = request.form['message']
 
-        server.quit()
-        print("✅ Emails sent successfully.")
-    except Exception as e:
-        print("Error sending email:", e)
+        # Store in database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO feedback (name, email, message)
+            VALUES (?, ?, ?)
+        ''', (name, user_email, message))
+        conn.commit()
 
-    flash("✅ Thank you for your feedback! We've emailed a confirmation to you.", "success")
-    return redirect(url_for('feedback'))
+        # Get the latest inserted feedback with timestamp
+        cursor.execute('SELECT timestamp FROM feedback WHERE email = ? ORDER BY id DESC LIMIT 1', (user_email,))
+        result = cursor.fetchone()
+        feedback_timestamp = result[0] if result else "Not Available"
+        conn.close()
 
+        # Email configuration
+        sender_email = "query.careerassistance@gmail.com"
+        sender_password = "rtho txgj rqfm vnyg"  # App password
+        admin_email = "careerassistancefeedback@gmail.com"
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
 
+        # --- Admin Email ---
+        admin_msg = MIMEMultipart()
+        admin_msg['From'] = sender_email
+        admin_msg['To'] = admin_email
+        admin_msg['Subject'] = "New Feedback Received"
 
+        admin_body = f"""
+📬 New Feedback Received
+
+Name: {name}
+Email: {user_email}
+Message: {message}
+Submitted on: {feedback_timestamp}
+        """
+        admin_msg.attach(MIMEText(admin_body, 'plain'))
+
+        # --- User Email ---
+        user_msg = MIMEMultipart()
+        user_msg['From'] = sender_email
+        user_msg['To'] = user_email
+        user_msg['Subject'] = "Thanks for your feedback!"
+
+        user_body = f"""
+Hi {name},
+
+Thank you for reaching out to us. We've received your feedback:
+
+"{message}"
+
+Submitted on: {feedback_timestamp}
+
+We appreciate your input!
+
+- Career Assistance Team
+        """
+        user_msg.attach(MIMEText(user_body, 'plain'))
+
+        # Send the emails
+        try:
+            server = smtplib.SMTP(smtp_server, smtp_port)
+            server.starttls()
+            server.login(sender_email, sender_password)
+
+            server.sendmail(sender_email, admin_email, admin_msg.as_string())
+            server.sendmail(sender_email, user_email, user_msg.as_string())
+
+            server.quit()
+            print("✅ Emails sent successfully.")
+        except Exception as email_err:
+            print("❌ Email sending failed:", str(email_err))
+
+        flash("✅ Thank you for your feedback! We've emailed a confirmation to you.", "success")
+        return redirect(url_for('feedback'))
+
+    except Exception as err:
+        print("❌ Feedback submission failed:", str(err))
+        flash("⚠️ Something went wrong. Please try again later.", "error")
+        return redirect(url_for('feedback'))
 
 @app.route('/trending')
 def trending_courses():
