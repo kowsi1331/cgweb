@@ -40,6 +40,20 @@
       font-size: 18px;
       z-index: 1000;
     }
+    .box{
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #f0f4ff;
+    color: #2a2a2a;
+    padding: 20px 30px;
+    margin: 30px auto;
+    border-radius: 10px;
+    max-width: 600px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
   </style>
 </head>
 <body>
@@ -50,7 +64,7 @@
 
   <form action="{{ url_for('submit_test') }}" method="post" id="testForm">
     <input type="hidden" name="group" value="{{ group }}">
-    <div id="questions" class="font"></div>
+    <div class="box"><div id="questions" class="font"></div></div>
     <center><button type="submit" class="submit">Submit Test</button></center>
   </form>
 
