@@ -59,8 +59,8 @@
 <body>
   <div class="timer" id="timer">10:00</div>
 
-  <center><h2 class="font">Aptitude Test</h2></center>
-  <p class="font"><strong>Selected Group:</strong> {{ group }}</p>
+  <center><h2 class="font">Aptitude Test</h2>
+  <h3 class="font"><strong>Selected Group:</strong> {{ group }}</h3></center>
 
   <form action="{{ url_for('submit_test') }}" method="post" id="testForm">
     <input type="hidden" name="group" value="{{ group }}">
