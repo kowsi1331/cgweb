@@ -41,7 +41,6 @@
         .btn:hover {
             background-color: #cc4b4b;
         }
-
         .back-btn {
             position: absolute;
             top: 10px;
@@ -56,9 +55,14 @@
             text-decoration: none;
             transition: 0.3s;
         }
-
         .back-btn:hover {
             transform: scale(1.1);
+        }
+        .error-msg {
+            text-align: center;
+            color: #ffc107;
+            font-size: 18px;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -67,15 +71,21 @@
     <a href="/student_dashboard" class="back-btn">&larr; Back</a>
 
     <div class="instruction-box">
-        <h2>Instructions for the Aptitude Test</h2>
-        <ul>
-            This test contains 10 multiple-choice questions.<br/><br/>
-            Questions are based on your selected +2 group.<br/><br/>
-            Each question has only one correct answer.<br/><br/>
-            You cannot go back until you submit the test.<br/><br/>
-            Make sure to answer all questions before submitting.<br/>
-        </ul>
-        <a class="btn" href="{{ url_for('aptitude_test') }}">Proceed to Test</a>
+        {% if group %}
+            <h2>Instructions for the Aptitude Test</h2>
+            <ul>
+                This test contains 10 multiple-choice questions.<br/><br/>
+                Questions are based on your selected +2 group: <strong>{{ group }}</strong><br/><br/>
+                Each question has only one correct answer.<br/><br/>
+                You cannot go back until you submit the test.<br/><br/>
+                Make sure to answer all questions before submitting.<br/><br/>
+            </ul>
+            <a class="btn" href="{{ url_for('aptitude_test') }}?group={{ group }}">Proceed to Test</a>
+        {% else %}
+            <div class="error-msg">
+                ⚠️ Please go back and select your +2 group before starting the test.
+            </div>
+        {% endif %}
     </div>
 
 </body>

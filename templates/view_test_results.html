@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
         h2 { color: #2c3e50; }
@@ -17,9 +20,29 @@
         th { background-color: #f7f7f7; }
         .correct { color: green; }
         .incorrect { color: red; }
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
+    <a href="/student_dashboard" class="back-btn">&larr; Back</a>
+
     <h2>Your Aptitude Test Results</h2>
     <table>
         <tr>

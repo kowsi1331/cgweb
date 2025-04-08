@@ -238,14 +238,18 @@ def aptitude_instructions():
     user_id = session['user_id']
     conn = get_db_connection()
     cursor = conn.cursor()
+
+    # Check if user has already taken the test
     cursor.execute("SELECT test_score FROM users WHERE id=?", (user_id,))
     test_score = cursor.fetchone()
     conn.close()
 
+    # Redirect to dashboard if test already taken
     if test_score and test_score[0] is not None:
-        return redirect('/student_dashboard')  # Already taken the test
+        return redirect('/student_dashboard')
 
     return render_template('aptitude_instructions.html')
+
 
 @app.route('/aptitude_test')
 def aptitude_test():
@@ -253,22 +257,24 @@ def aptitude_test():
         return redirect(url_for('login'))
 
     user_id = session['user_id']
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Get the group
+    # Get user's +2 group
     cursor.execute("SELECT student_group FROM users WHERE id=?", (user_id,))
     result = cursor.fetchone()
 
     if not result or not result[0]:
         conn.close()
-        print("DEBUG: No group found for user")
-        return render_template('aptitude_test.html', group="", error="No group selected. Please update your group in the dashboard.")
+        return render_template(
+            'aptitude_test.html',
+            group="",
+            error="No group selected. Please update your group in the dashboard."
+        )
 
     student_group = result[0]
 
-    # Check if the user already completed the test
+    # Check if test already submitted
     cursor.execute("SELECT * FROM aptitude_results WHERE user_id=?", (user_id,))
     test_result = cursor.fetchone()
     conn.close()
@@ -276,7 +282,6 @@ def aptitude_test():
     if test_result:
         return render_template('test_already_taken.html')
 
-    print(f"DEBUG: Rendering aptitude test for group: {student_group}")
     return render_template('aptitude_test.html', group=student_group)
 
 

@@ -6,6 +6,12 @@
   <title>Aptitude Test</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='apt.css') }}">
   <style>
+    body {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+    }
 
     .font {
       color: white;
@@ -40,31 +46,41 @@
       font-size: 18px;
       z-index: 1000;
     }
-    .box{
-    font-size: 32px;
-    font-weight: bold;
-    text-align:left;
-    background-color: #f0f4ff;
-    color: #2a2a2a;
-    padding: 20px 30px;
-    margin: 30px auto;
-    border-radius: 10px;
-    max-width: 600px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 
+    .box {
+      font-size: 18px;
+      font-weight: normal;
+      text-align: left;
+      background-color: #f0f4ff;
+      color: #2a2a2a;
+      padding: 20px 30px;
+      margin: 30px auto;
+      border-radius: 10px;
+      max-width: 700px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    p {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
   </style>
 </head>
 <body>
   <div class="timer" id="timer">10:00</div>
 
-  <center><h2 class="font">Aptitude Test</h2>
-  <h3 class="font"><strong>Selected Group:</strong> {{ group }}</h3></center>
+  <center>
+    <h2 class="font">Aptitude Test</h2>
+    <h3 class="font"><strong>Selected Group:</strong> {{ group }}</h3>
+  </center>
 
   <form action="{{ url_for('submit_test') }}" method="post" id="testForm">
     <input type="hidden" name="group" value="{{ group }}">
-   <div id="questions" class="box"></div>
+    <div id="questions" class="box"></div>
     <center><button type="submit" class="submit">Submit Test</button></center>
   </form>
 
@@ -146,18 +162,18 @@
         };
     
        
-    function showQuestions() {
+        function showQuestions() {
       const container = document.getElementById("questions");
       if (questions[group]) {
         questions[group].forEach((question, i) => {
           let html = `<p>${i + 1}. ${question.q}</p>`;
           question.options.forEach(option => {
-            html += `<input type="radio" name="q${i + 1}" value="${option}" required> ${option}<br>`;
+            html += `<label><input type="radio" name="q${i + 1}" value="${option}" required> ${option}</label><br>`;
           });
           container.insertAdjacentHTML('beforeend', html + "<br>");
         });
       } else {
-        container.innerHTML = "<p style='color: red;'>Please select a valid group before attempting the test.</p>";
+        container.innerHTML = "<p style='color: red;'>⚠️ Invalid group detected. Please go back and select your +2 group.</p>";
       }
     }
 
@@ -165,7 +181,7 @@
       showQuestions();
 
       // Timer
-      let timeLeft = 10 * 60; // 10 minutes in seconds
+      let timeLeft = 10 * 60; // 10 minutes
       const timerDisplay = document.getElementById("timer");
 
       function updateTimer() {
@@ -180,14 +196,13 @@
 
         if (timeLeft <= 0) {
           clearInterval(countdown);
-          alert("Time's up! Your test is being submitted.");
+          alert("⏰ Time's up! Your test is being submitted.");
           document.getElementById("testForm").submit();
         }
       }, 1000);
 
       updateTimer();
     });
-    </script>
-    
+  </script>
 </body>
 </html>
