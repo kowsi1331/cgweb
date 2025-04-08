@@ -242,13 +242,21 @@ def aptitude_instructions():
     # Check if user has already taken the test
     cursor.execute("SELECT test_score FROM users WHERE id=?", (user_id,))
     test_score = cursor.fetchone()
+
+    # Get the user's +2 group
+    cursor.execute("SELECT student_group FROM users WHERE id=?", (user_id,))
+    group_result = cursor.fetchone()
     conn.close()
 
     # Redirect to dashboard if test already taken
     if test_score and test_score[0] is not None:
         return redirect('/student_dashboard')
 
-    return render_template('aptitude_instructions.html')
+    # Pass the group to the template (can be None)
+    group = group_result[0] if group_result and group_result[0] else None
+
+    return render_template('aptitude_instructions.html', group=group)
+
 
 
 @app.route('/aptitude_test')
