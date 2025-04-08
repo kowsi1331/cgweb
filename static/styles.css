@@ -10,7 +10,7 @@ body {
 /* Centering Forms */
 .container {
     width: 500px;
-    height: 500px;
+    height: 350px;
     background: white;
     padding: 30px;
     border-radius: 15px;
@@ -81,6 +81,25 @@ button:hover {
 .navbar a:hover {
     color: #ffdd57;
     text-shadow: 0px 0px 8px rgba(255, 221, 87, 0.8);
+}
+.btn-link {
+    display: inline-block;
+    width: 200px;
+    padding: 14px;
+    margin: 15px 10px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.btn-link:hover {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    transform: scale(1.05);
 }
 
 /* Table Styling */

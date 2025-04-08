@@ -18,24 +18,27 @@
 
 </style>
 <body>
-    <header style="display: flex; align-items: center; padding: 10px;">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 50px; margin-right: 15px;">
-        <h1 style="color: white;">Career Assistance Platform</h1>
-        <a href="/login" class="navbar">Login</a>
-        <a href="/signup" class="navbar">Signup</a>
+    <header class="navbar">
+        <div style="display: flex; align-items: center;">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 50px; margin-right: 15px;">
+            <h1 style="margin: 0; font-size: 24px;">Career Assistance Platform</h1>
+        </div>
+        <div>
+            <a href="/login">Login</a>
+            <a href="/signup">Signup</a>
+        </div>
     </header>
-           
-
-    <div class="container">
+    
+    <div class="container" style="text-align: center; padding: 50px;">
         <h1>Welcome to Career Assistance</h1>
         <p>Your one-stop solution for career guidance and resources.</p>
-        <p>Helping you choose the right career path</p>
-        <p>We help you discover your strengths and interests to find the right career path.</p>
+        <p>Helping you discover your strengths and interests to find the right career path.</p>
         <p>Explore our services, take our aptitude test, and get personalized recommendations.</p>
         <p>Join us today and take the first step towards a successful career!</p>
-        <a href="/signup" class="button">Get Started</a>
-        <a href="/login" class="button">Login</a>
+        <a href="/signup" class="btn-link">Get Started</a>
+        <a href="/login" class="btn-link">Login</a>
     </div>
+    
     <div class="footer">
         <p>&copy; 2023 Career Assistance Platform. All rights reserved.</p>
 </body>
