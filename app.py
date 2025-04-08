@@ -769,16 +769,17 @@ def submit_feedback():
         # Store in database
         conn = get_db_connection()
         cursor = conn.cursor()
+        timestamp = get_current_ist_time()
         cursor.execute('''
-            INSERT INTO feedback (name, email, message)
-            VALUES (?, ?, ?)
-        ''', (name, user_email, message))
+            INSERT INTO feedback (name, email, message,timesamp)
+            VALUES (?, ?, ?, ?)
+        ''', (name, user_email, message, timestamp))
         conn.commit()
 
         # Get the latest inserted feedback with timestamp
         cursor.execute('SELECT timestamp FROM feedback WHERE email = ? ORDER BY id DESC LIMIT 1', (user_email,))
         result = cursor.fetchone()
-        feedback_timestamp = result[0] if result else "Not Available"
+        feedback_timestamp = timestamp
         conn.close()
 
         if session.get('user_id'):
