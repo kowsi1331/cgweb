@@ -59,7 +59,6 @@ button:hover {
 
 /* Navbar */
 .navbar {
-    background: linear-gradient(90deg, #ff416c, #ff4b2b);
     padding: 15px;
     color: white;
     display: flex;
@@ -84,7 +83,7 @@ button:hover {
 }
 .btn-link {
     display: inline-block;
-    width: 200px;
+    width: 100px;
     padding: 14px;
     margin: 15px 10px;
     background: linear-gradient(45deg, #ff416c, #ff4b2b);

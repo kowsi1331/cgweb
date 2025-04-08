@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, url_for, render_template,flash
+from flask import Flask, request, session, redirect, url_for, render_template, flash, send_from_directory
 import sqlite3
 import datetime
 import json
@@ -33,6 +33,14 @@ def get_db_connection():
     conn = sqlite3.connect('career.db')
     conn.row_factory = sqlite3.Row
     return conn
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('static', 'sitemap.xml')
+
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('static', 'robots.txt')
 
 # ✅ Default Page
 @app.route('/')
