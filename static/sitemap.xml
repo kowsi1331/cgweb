@@ -1,7 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://careerassistance.onrender.com/</loc>
-    <priority>1.00</priority>
+    <loc>https://your-site-name.onrender.com/</loc>
   </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/index</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/login</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/signup</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/verify_otp</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/aptitude_instructions</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/aptitude_test</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/test_already_taken</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/view_test_results</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/courses</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/trending</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/sample</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/QAE</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/details</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/feedback</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/student_dashboard</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/admin_dashboard</loc>
+  </url>
+  <url>
+    <loc>https://your-site-name.onrender.com/user_details</loc>
+  </url>
+
 </urlset>
+<!-- This sitemap is auto-generated. Do not edit manually. -->
