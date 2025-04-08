@@ -20,6 +20,14 @@ app.config['MAIL_USERNAME'] = 'query.careerassistance25@gmail.com'      # Change
 app.config['MAIL_PASSWORD'] = 'rtho txgj rqfm vnyg'        # Use an App Password
 mail = Mail(app)
 
+
+def log_activity(user_id, activity):
+    conn = sqlite3.connect('career.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user_id, activity))
+    conn.commit()
+    conn.close()
+
 def update_login_time(user_id):
     conn = sqlite3.connect('career.db')
     cursor = conn.cursor()
@@ -53,6 +61,8 @@ def update_group():
         return redirect('/login')
 
     user_id = session['user_id']
+    log_activity(session['user_id'], 'updated student group')
+
     student_group = request.form.get('group')
 
     if not student_group:
@@ -78,11 +88,10 @@ def update_group():
 
     return redirect('/student_dashboard')
 
-
-
 # ✅ Signup Page
 def is_valid_email(email):
     return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -128,7 +137,7 @@ def signup():
         mail.send(msg_admin)
 
         return redirect(url_for('verify_otp'))
-    log_activity(session['user_id'], 'new student signup')
+   
     return render_template('signup.html')
 
 
@@ -145,23 +154,29 @@ def verify_otp():
                 cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 0)",
                                (user['name'], user['email'], user['password']))
                 conn.commit()
+
+                # Get inserted user's ID
+                cursor.execute("SELECT id FROM users WHERE email = ?", (user['email'],))
+                user_record = cursor.fetchone()
                 conn.close()
 
-                session.pop('otp', None)
+                if user_record:
+                    session['user_id'] = user_record['id']
+                    session['is_admin'] = 0
+                    log_activity(session['user_id'], 'new student signup')
+
+                session.pop('otp', None)  # Clear OTP
+
+                # ✅ Success message
+                flash("✅ Verification successful! Please login with the same email and password.", "success")
                 return redirect(url_for('login'))
         else:
-            return render_template('verify_otp.html', error="Invalid OTP. Please try again.")
-    if 'otp' in session:
-        flash("OTP sent to your email. Please check your inbox or spam folder.")
-        log_activity(session['user_id'], 'otp verified')
-    return render_template('verify_otp.html')
+            return render_template('verify_otp.html', error="❌ Invalid OTP. Please try again.")
 
-def log_activity(user_id, activity):
-    conn = sqlite3.connect('career.db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user_id, activity))
-    conn.commit()
-    conn.close()
+    if 'otp' in session:
+        flash("📧 OTP sent to your email. Please check your inbox or spam folder.")
+    
+    return render_template('verify_otp.html')
 
 # ✅ Login Page
 @app.route('/login', methods=['GET', 'POST'])
@@ -189,10 +204,9 @@ def login():
         # Successful login
         session['user_id'] = user['id']
         session['is_admin'] = user['is_admin']
-
+        log_activity(session['user_id'], 'logged in')
         login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user['id']))
-        cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user['id'], "Logged in"))
 
         conn.commit()
         conn.close()
@@ -201,7 +215,7 @@ def login():
             return redirect(url_for('admin_dashboard'))
         else:
             return redirect(url_for('student_dashboard'))
-    log_activity(session['user_id'], 'logged in')
+    
     return render_template('login.html')
 
 @app.route('/track_activity/<activity>')
@@ -215,8 +229,9 @@ def track_activity(activity):
 def student_dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-
+    
     user_id = session['user_id']
+    log_activity(session['user_id'], 'Visited Student Dashboard')
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -235,7 +250,7 @@ def student_dashboard():
         }
 
         return render_template('student_dashboard.html', student=student_data)
-    log_activity(session['user_id'], 'Visited Student Dashboard')
+   
     return redirect(url_for('login'))
 
 @app.route('/aptitude_instructions')
@@ -244,6 +259,7 @@ def aptitude_instructions():
         return redirect('/login')
 
     user_id = session['user_id']
+    log_activity(session['user_id'], 'Visited instrution page')
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -262,7 +278,7 @@ def aptitude_instructions():
 
     # Pass the group to the template (can be None)
     group = group_result[0] if group_result and group_result[0] else None
-    log_activity(session['user_id'], 'Visited instrution page')
+    
     return render_template('aptitude_instructions.html', group=group)
 
 @app.route('/aptitude_test')
@@ -271,6 +287,7 @@ def aptitude_test():
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+    log_activity(session['user_id'], 'Visited test page')
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -295,7 +312,7 @@ def aptitude_test():
 
     if test_result:
         return render_template('test_already_taken.html')
-    log_activity(session['user_id'], 'Visited test page')
+   
     return render_template('aptitude_test.html', group=student_group)
 
 @app.route('/submit_test', methods=['POST'])
@@ -305,7 +322,7 @@ def submit_test():
         return redirect(url_for('login'))
 
     user_id = session['user_id']
-    print(f"User ID: {user_id}")
+    log_activity(session['user_id'], 'Submitted test')
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -487,7 +504,7 @@ def submit_test():
         print("Error inserting into DB:", e)
     finally:
         conn.close()
-        log_activity(session['user_id'], 'Submitted the test')
+       
     return redirect(url_for('student_dashboard'))
 
 @app.route('/view_test_results')
@@ -496,6 +513,7 @@ def view_test_results():
         return redirect('/login')
 
     user_id = session['user_id']
+    log_activity(session['user_id'], 'Viewed test results')
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -672,7 +690,7 @@ def view_test_results():
             "your_answer": user_ans,
             "correct_answer": correct_ans
         })
-        log_activity(session['user_id'], 'Visited result page')
+        
     return render_template('view_test_results.html', questions=questions)
 
 @app.route('/admin_dashboard')
@@ -729,7 +747,8 @@ def logout():
 
 @app.route('/feedback')
 def feedback():
-    log_activity(session['user_id'], 'Visited feedback page')
+    if 'user_id' in session:
+        log_activity(session['user_id'], 'Visited feedback page')
     return render_template('feedback.html')
 
 @app.route('/submit_feedback', methods=['POST'])
@@ -753,6 +772,9 @@ def submit_feedback():
         result = cursor.fetchone()
         feedback_timestamp = result[0] if result else "Not Available"
         conn.close()
+
+        if session.get('user_id'):
+            log_activity(session['user_id'], 'submitted feedback')
 
         # Email configuration
         sender_email = "query.careerassistance25@gmail.com"
@@ -818,12 +840,13 @@ We appreciate your input!
     except Exception as err:
         print("❌ Feedback submission failed:", str(err))
         flash("⚠️ Something went wrong. Please try again later.", "error")
-        log_activity(session['user_id'], 'submitted feedback')
+        
         return redirect(url_for('feedback'))
 
 @app.route('/trending')
 def trending_courses():
-    log_activity(session['user_id'], 'Visited trending courses')
+    if 'user_id' in session:
+        log_activity(session['user_id'], 'Visited trending courses')
     return render_template('trending.html')
 
 @app.route('/courses')
@@ -832,6 +855,7 @@ def recommended_courses():
         return redirect('/login')
 
     user_id = session['user_id']
+    log_activity(session['user_id'], 'Visited recommended courses')
     conn = sqlite3.connect('career.db')
     cursor = conn.cursor()
 
@@ -954,22 +978,25 @@ def recommended_courses():
                                recommended_courses=recommended_courses)
 
     conn.close()
-    log_activity(session['user_id'], 'Viewed the recommended courses')
+
     return redirect('/student_dashboard')
 
 @app.route('/details')
 def details():
-    log_activity(session['user_id'], 'Visited course details')
+    if 'user_id' in session: 
+        log_activity(session['user_id'], 'Visited course details')
     return render_template('details.html')
 
 @app.route('/QAE')
 def quantitative_exams():
-    log_activity(session['user_id'], 'Visited QAE page')
+    if 'user_id' in session:
+        log_activity(session['user_id'], 'Visited QAE page')
     return render_template('QAE.html')
 
 @app.route('/sample')
 def sample():
-    log_activity(session['user_id'], 'Visited sample qae paper')
+    if 'user_id' in session:
+        log_activity(session['user_id'], 'Visited sample qae paper')
     return render_template('sample.html')
 
 if __name__ == '__main__':
