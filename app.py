@@ -178,7 +178,9 @@ def verify_otp():
                 flash("✅ Verification successful! Please login with the same email and password.", "success")
                 return redirect(url_for('login'))
         else:
-            return render_template('verify_otp.html', error="❌ Invalid OTP. Please try again.")
+            flash("❌ Invalid OTP. Please try again.", "error")
+            return render_template('verify_otp.html')
+
 
     if 'otp' in session:
         flash("📧 OTP sent to your email. Please check your inbox or spam folder.")
