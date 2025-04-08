@@ -771,7 +771,7 @@ def submit_feedback():
         cursor = conn.cursor()
         timestamp = get_current_ist_time()
         cursor.execute('''
-            INSERT INTO feedback (name, email, message,timesamp)
+            INSERT INTO feedback (name, email, message,timestamp)
             VALUES (?, ?, ?, ?)
         ''', (name, user_email, message, timestamp))
         conn.commit()
