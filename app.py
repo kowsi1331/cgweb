@@ -29,7 +29,7 @@ def log_activity(user_id, activity):
     conn = sqlite3.connect('career.db')
     cursor = conn.cursor()
     timestamp = get_current_ist_time()
-    cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user_id, activity))
+    cursor.execute("INSERT INTO user_activity (user_id, activity,timestamp) VALUES (?, ?,?)", (user_id, activity,timestamp))
     conn.commit()
     conn.close()
 
@@ -212,7 +212,8 @@ def login():
         session['user_id'] = user['id']
         session['is_admin'] = user['is_admin']
         log_activity(session['user_id'], 'logged in')
-        login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        login_time = get_current_ist_time()
+
         cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user['id']))
 
         conn.commit()
