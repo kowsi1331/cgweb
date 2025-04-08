@@ -10,6 +10,7 @@ from flask import session
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from pytz import timezone
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -20,10 +21,14 @@ app.config['MAIL_USERNAME'] = 'query.careerassistance25@gmail.com'      # Change
 app.config['MAIL_PASSWORD'] = 'rtho txgj rqfm vnyg'        # Use an App Password
 mail = Mail(app)
 
+def get_current_ist_time():
+    ist = timezone('Asia/Kolkata')
+    return datetime.datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
 
 def log_activity(user_id, activity):
     conn = sqlite3.connect('career.db')
     cursor = conn.cursor()
+    timestamp = get_current_ist_time()
     cursor.execute("INSERT INTO user_activity (user_id, activity) VALUES (?, ?)", (user_id, activity))
     conn.commit()
     conn.close()
@@ -31,7 +36,7 @@ def log_activity(user_id, activity):
 def update_login_time(user_id):
     conn = sqlite3.connect('career.db')
     cursor = conn.cursor()
-    login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    login_time = get_current_ist_time()
     cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user_id))
     conn.commit()
     conn.close()
@@ -163,11 +168,13 @@ def verify_otp():
                 if user_record:
                     session['user_id'] = user_record['id']
                     session['is_admin'] = 0
+
+                    # ✅ Log only after successful OTP verification
+                    log_activity(session['user_id'], 'otp verified')
                     log_activity(session['user_id'], 'new student signup')
 
                 session.pop('otp', None)  # Clear OTP
 
-                # ✅ Success message
                 flash("✅ Verification successful! Please login with the same email and password.", "success")
                 return redirect(url_for('login'))
         else:
@@ -175,7 +182,7 @@ def verify_otp():
 
     if 'otp' in session:
         flash("📧 OTP sent to your email. Please check your inbox or spam folder.")
-    
+
     return render_template('verify_otp.html')
 
 # ✅ Login Page
