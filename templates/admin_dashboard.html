@@ -86,6 +86,14 @@
     .back-btn:hover {
         transform: scale(1.1); 
     }
+    .activity-time {
+    font-size: 12px;
+    font-weight: normal;
+    display: block;
+    margin-top: 5px;
+    color: #00ffcc;
+}
+
     </style>
 </head>
 <body>
@@ -100,16 +108,18 @@
             </div>
 
             <h3>Registered Users</h3>
-
             <div class="card-container">
                 {% for user in users %}
                     <a href="{{ url_for('user_details', user_id=user.id) }}" class="user-card">
-                        {{ user.id }}
+                        <div>ID: {{ user.id }}</div>
+                        <div>{{ user.name }}</div>
                         <span class="login-time">Last Login: {{ user.login_time or 'Never' }}</span>
-                        <span class="activity-count">Actions: {{ user.activity_count or 0 }}</span>
+                        <span class="activity-count">Total Actions: {{ user.activity_count or 0 }}</span>
+                        <span class="activity-time">Last Activity: {{ user.last_activity or 'No Activity' }}</span>
                     </a>
                 {% endfor %}
             </div>
+            
 
         </div>
     </div>

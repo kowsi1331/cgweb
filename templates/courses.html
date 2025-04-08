@@ -7,6 +7,11 @@
     <title>Recommended Courses</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
+        body {
+            background-color: #1a1a2e;
+            font-family: Arial, sans-serif;
+        }
+
         .card-container {
             display: flex;
             flex-wrap: wrap;
@@ -14,6 +19,7 @@
             gap: 15px;
             padding: 20px;
         }
+
         .course-card {
             width: 250px;
             padding: 15px;
@@ -24,10 +30,12 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s, background 0.3s;
         }
+
         .course-card:hover {
             background: linear-gradient(120deg, #2575fc, #36046b);
             transform: scale(1.05);
         }
+
         .course-card button {
             margin-top: 10px;
             background: white;
@@ -38,38 +46,41 @@
             font-weight: bold;
             border-radius: 5px;
         }
+
         .course-card button:hover {
             background: #e0e0e0;
         }
-        .back-btn {
-        position: absolute;
-        top: 10px;
-        left: 20px;
-        background-color: #ff4d4d; /* Same as Logout button (Red) */
-        color: white;
-        padding: 8px;
-        padding-top: 2px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight:bolder;
-        text-decoration: none;
-        transition: 0.3s;
-    }
 
-    .back-btn:hover {
-        transform: scale(1.1); 
-    }
-    .font{
-        color: white;
-    }
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px;
+            padding-top: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bolder;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        h2.font, p.font {
+            text-align: center;
+            color: white;
+        }
     </style>
 </head>
 <script>
   function goToCourse(courseName) {
     window.location.href = "/details?course=" + encodeURIComponent(courseName);
 }
-
 </script>
 
 <body>

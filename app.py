@@ -128,7 +128,7 @@ def signup():
         mail.send(msg_admin)
 
         return redirect(url_for('verify_otp'))
-
+    log_activity(session['user_id'], 'new student signup')
     return render_template('signup.html')
 
 
@@ -153,7 +153,7 @@ def verify_otp():
             return render_template('verify_otp.html', error="Invalid OTP. Please try again.")
     if 'otp' in session:
         flash("OTP sent to your email. Please check your inbox or spam folder.")
-
+        log_activity(session['user_id'], 'otp verified')
     return render_template('verify_otp.html')
 
 def log_activity(user_id, activity):
@@ -201,7 +201,7 @@ def login():
             return redirect(url_for('admin_dashboard'))
         else:
             return redirect(url_for('student_dashboard'))
-
+    log_activity(session['user_id'], 'logged in')
     return render_template('login.html')
 
 @app.route('/track_activity/<activity>')
@@ -235,7 +235,7 @@ def student_dashboard():
         }
 
         return render_template('student_dashboard.html', student=student_data)
-
+    log_activity(session['user_id'], 'Visited Student Dashboard')
     return redirect(url_for('login'))
 
 @app.route('/aptitude_instructions')
@@ -262,10 +262,8 @@ def aptitude_instructions():
 
     # Pass the group to the template (can be None)
     group = group_result[0] if group_result and group_result[0] else None
-
+    log_activity(session['user_id'], 'Visited instrution page')
     return render_template('aptitude_instructions.html', group=group)
-
-
 
 @app.route('/aptitude_test')
 def aptitude_test():
@@ -297,9 +295,8 @@ def aptitude_test():
 
     if test_result:
         return render_template('test_already_taken.html')
-
+    log_activity(session['user_id'], 'Visited test page')
     return render_template('aptitude_test.html', group=student_group)
-
 
 @app.route('/submit_test', methods=['POST'])
 def submit_test():
@@ -490,7 +487,7 @@ def submit_test():
         print("Error inserting into DB:", e)
     finally:
         conn.close()
-
+        log_activity(session['user_id'], 'Submitted the test')
     return redirect(url_for('student_dashboard'))
 
 @app.route('/view_test_results')
@@ -675,7 +672,7 @@ def view_test_results():
             "your_answer": user_ans,
             "correct_answer": correct_ans
         })
-
+        log_activity(session['user_id'], 'Visited result page')
     return render_template('view_test_results.html', questions=questions)
 
 @app.route('/admin_dashboard')
@@ -685,7 +682,15 @@ def admin_dashboard():
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, name, email, student_group,login_time,(SELECT COUNT(*) FROM user_activity WHERE user_activity.user_id = users.id) AS activity_count FROM users WHERE is_admin = 0")
+    cursor.execute("""
+    SELECT 
+        id, name, email, student_group, login_time,
+        (SELECT COUNT(*) FROM user_activity WHERE user_activity.user_id = users.id) AS activity_count,
+        (SELECT timestamp FROM user_activity WHERE user_activity.user_id = users.id ORDER BY timestamp DESC LIMIT 1) AS last_activity
+    FROM users 
+    WHERE is_admin = 0
+""")
+
     users = cursor.fetchall()
     conn.close()
 
@@ -724,10 +729,8 @@ def logout():
 
 @app.route('/feedback')
 def feedback():
+    log_activity(session['user_id'], 'Visited feedback page')
     return render_template('feedback.html')
-
-
-
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
@@ -815,31 +818,40 @@ We appreciate your input!
     except Exception as err:
         print("❌ Feedback submission failed:", str(err))
         flash("⚠️ Something went wrong. Please try again later.", "error")
+        log_activity(session['user_id'], 'submitted feedback')
         return redirect(url_for('feedback'))
 
 @app.route('/trending')
 def trending_courses():
+    log_activity(session['user_id'], 'Visited trending courses')
     return render_template('trending.html')
 
 @app.route('/courses')
 def recommended_courses():
-    if 'user_id' in session:
-        user_id = session['user_id']
-        
-        conn = sqlite3.connect('career.db')
-        cursor = conn.cursor()
-        
-        # Fetch student details
-        cursor.execute("SELECT name, test_score, student_group FROM users WHERE id=?", (user_id,))
-        student = cursor.fetchone()
-        
-        if student:
-            student_name, test_score, student_group = student
-            test_score = test_score or 0  # Handle NULL scores
-            group = (student_group or "").strip()
+    if 'user_id' not in session:
+        return redirect('/login')
 
-            if group == "Bio-Maths":
-                courses = [
+    user_id = session['user_id']
+    conn = sqlite3.connect('career.db')
+    cursor = conn.cursor()
+
+    # Fetch student details
+    cursor.execute("SELECT name, test_score, student_group FROM users WHERE id=?", (user_id,))
+    student = cursor.fetchone()
+
+    if student:
+        student_name, test_score, student_group = student
+
+        if test_score is None:
+            conn.close()
+            flash("⚠️ Please complete the aptitude test to view recommended courses.")
+            return redirect('/aptitude_instructions')
+
+        group = (student_group or "").strip()
+        test_score = test_score or 0
+
+        if group == "Bio-Maths":
+            courses = [
                     "B.Sc Mathematics", 
                     "B.Sc Statistics", 
                     "B.Sc Physics", 
@@ -855,8 +867,8 @@ def recommended_courses():
                     "B.C.A"
                 ]
 
-            elif group == "Science with Computer Science":
-                courses = [
+        elif group == "Science with Computer Science":
+            courses = [
                     "B.Sc Computer Science", 
                     "B.Sc Mathematics",
                     "B.Sc Statistics", 
@@ -869,7 +881,7 @@ def recommended_courses():
                     "B.Sc Data Science and Artificial Intelligence"
                 ]
 
-            elif group == "Commerce with Computer Applications":
+        elif group == "Commerce with Computer Applications":
                 courses = [
                     "B.Com (Computer Applications)", 
                     "B.Com", 
@@ -887,7 +899,7 @@ def recommended_courses():
                     "MBA Business Analytics"
                 ]
 
-            elif group == "Pure Commerce":
+        elif group == "Pure Commerce":
                 courses = [
                     "B.Com", 
                     "B.Com (Corporate Secretaryship)", 
@@ -901,7 +913,7 @@ def recommended_courses():
                     "B.B.A (Digital Marketing and Business Analytics)"
                 ]
 
-            elif group == "Arts with Computer Applications":
+        elif group == "Arts with Computer Applications":
                 courses = [
                     "B.A. English", 
                     "B.A. History and Tourism", 
@@ -916,7 +928,7 @@ def recommended_courses():
                     "B.Sc Computer Science with Cognitive Systems"
                 ]
 
-            elif group == "Pure Arts":
+        elif group == "Pure Arts":
                 courses = [
                     "B.A. English",
                     "B.A. History and Tourism", 
@@ -928,33 +940,36 @@ def recommended_courses():
                     "B.Sc (Home Science - Nutrition Food Service Management and Dietetics)"
                 ]
 
-            else:
-                courses = ["General – Group not identified. Explore common career paths."]
-
-            # Convert to list of dicts (optional descriptions could be added later)
-            recommended_courses = [{"name": c, "description": ""} for c in courses]
-
+        else:
+            # Group not matched with any known categories
             conn.close()
-            return render_template("courses.html", 
-                                   student={"name": student_name, "test_score": test_score}, 
-                                   recommended_courses=recommended_courses)
-        
+            flash("Please update your profile by completing the test.")
+            return redirect('/student_dashboard')
+
+        recommended_courses = [{"name": c, "description": ""} for c in courses]
         conn.close()
-        return redirect('/student_dashboard')
 
-    return redirect('/login')
+        return render_template("courses.html",
+                               student={"name": student_name, "test_score": test_score},
+                               recommended_courses=recommended_courses)
 
+    conn.close()
+    log_activity(session['user_id'], 'Viewed the recommended courses')
+    return redirect('/student_dashboard')
 
 @app.route('/details')
 def details():
+    log_activity(session['user_id'], 'Visited course details')
     return render_template('details.html')
 
 @app.route('/QAE')
 def quantitative_exams():
+    log_activity(session['user_id'], 'Visited QAE page')
     return render_template('QAE.html')
 
 @app.route('/sample')
 def sample():
+    log_activity(session['user_id'], 'Visited sample qae paper')
     return render_template('sample.html')
 
 if __name__ == '__main__':
