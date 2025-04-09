@@ -62,7 +62,6 @@
 
 </style>
 <body>
-    <strong><a href="/" class="back-btn">&larr;</a></strong>
     {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
@@ -70,7 +69,7 @@
     {% endfor %}
   {% endif %}
 {% endwith %}
-
+<strong><a href="/" class="back-btn">&larr;</a></strong>
     <div class="auth-container">
         <h2>Login</h2>
         {% if error %}
@@ -81,10 +80,18 @@
         <form action="/login" method="POST" onsubmit="return validateLoginForm()">
             <input type="email" class="size" name="email" id="login_email" placeholder="Email" required>
             <input type="password" class="size" name="password" id="login_password" placeholder="Password" required>
+            <div style="margin-top: 5px; margin-bottom: 10px;">
+                <input type="checkbox" id="show_login_password" onclick="toggleLoginPassword()">
+                <label for="show_login_password">Show Password</label>
+            </div>            
             <button type="submit" class="button">Login</button>
         </form>
         
         <script>
+            function toggleLoginPassword() {
+        const pwd = document.getElementById("login_password");
+        pwd.type = pwd.type === "password" ? "text" : "password";
+    }
         function validateLoginForm() {
             const email = document.getElementById("login_email").value;
             const password = document.getElementById("login_password").value;
