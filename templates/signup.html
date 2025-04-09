@@ -55,11 +55,9 @@
             <input type="text" class="size" name="name" placeholder="Full Name" required>
             <input type="email" class="size" id="signup_email" name="email" placeholder="Email" required>
             <input type="password" class="size" id="signup_password" name="password" placeholder="Password" required>
-            <div style="margin-top: 10px;">
-                <label style="display: flex; align-items: center; font-size: 14px;">
-                  <input type="checkbox" id="show_signup_password" onclick="toggleSignupPassword()" style="margin-right: 5px;">
-                  Show Password
-                </label>
+            <div style="margin-top: 10px; display: flex; align-items: center; justify-content: flex-start; gap: 5px;">
+                <input type="checkbox" id="show_signup_password" onclick="toggleSignupPassword()">
+                <label for="show_signup_password" style="margin: 0;">Show Password</label>
               </div>
               
                        
