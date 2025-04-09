@@ -3,8 +3,8 @@ import os
 
 def reset_database():
     db_path = "career.db"
-    if os.path.exists(db_path):
-        os.remove(db_path)  # Delete old database
+    #if os.path.exists(db_path):
+        #os.remove(db_path)  # Delete old database
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
