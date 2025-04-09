@@ -126,8 +126,8 @@ th {
 
 /* Auth Pages (Login & Signup) */
 .auth-container {
-    width: 200px;
-    height: 350px;
+    width: 300px;
+    height: 400px;
     background: white;
     padding: 30px;
     border-radius: 15px;
