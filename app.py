@@ -173,9 +173,9 @@ def verify_otp():
                     log_activity(session['user_id'], 'otp verified')
                     log_activity(session['user_id'], 'new student signup')
 
+                flash("✅ Verification successful! Please login with the same email and password.", "success")
                 session.pop('otp', None)  # Clear OTP
 
-                flash("✅ Verification successful! Please login with the same email and password.", "success")
                 return redirect(url_for('login'))
         else:
             flash("❌ Invalid OTP. Please try again.", "error")
