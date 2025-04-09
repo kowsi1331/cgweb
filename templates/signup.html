@@ -55,10 +55,11 @@
             <input type="text" class="size" name="name" placeholder="Full Name" required>
             <input type="email" class="size" id="signup_email" name="email" placeholder="Email" required>
             <input type="password" class="size" id="signup_password" name="password" placeholder="Password" required>
-            <div style="margin-top: 5px; margin-bottom: 10px;">
-                <input type="checkbox" id="show_signup_password" onclick="toggleSignupPassword()">
-                <label for="show_signup_password">Show Password</label>
-            </div>            
+            <div style="margin-top: 10px;">
+                <input type="checkbox" id="show_signup_password" onclick="toggleSignupPassword()" style="display: inline;">
+                <label for="show_signup_password" style="display: inline;">Show Password</label>
+            </div>
+                       
             {% if not email_registered %}
     <button type="submit" class="button">Signup</button>
 {% endif %}

@@ -80,10 +80,10 @@
         <form action="/login" method="POST" onsubmit="return validateLoginForm()">
             <input type="email" class="size" name="email" id="login_email" placeholder="Email" required>
             <input type="password" class="size" name="password" id="login_password" placeholder="Password" required>
-            <div style="margin-top: 5px; margin-bottom: 10px;">
-                <input type="checkbox" id="show_login_password" onclick="toggleLoginPassword()">
-                <label for="show_login_password">Show Password</label>
-            </div>            
+            <div style="margin-top: 10px;">
+                <input type="checkbox" id="show_login_password" onclick="toggleLoginPassword()" style="display: inline;">
+                <label for="show_login_password" style="display: inline;">Show Password</label>
+            </div>                        
             <button type="submit" class="button">Login</button>
         </form>
         
