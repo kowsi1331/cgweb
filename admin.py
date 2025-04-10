@@ -3,14 +3,13 @@ from psycopg2 import sql
 import os
 
 # Replace this with your actual DATABASE_URL or fetch from environment
-DATABASE_URL = os.getenv("DATABASE_URL", "your_postgres_connection_string_here")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://career_nspr_user:1gUxsqTSBQQ3FZt0PS7hwY28gVIUNYve@dpg-cvrov0je5dus738em5jg-a/career_nspr")
 
 def reset_database():
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cursor = conn.cursor()
-        #if os.path.exists(db_path):
-        #os.remove(db_path)  # Delete old database
+       
         
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
