@@ -252,7 +252,6 @@ def student_dashboard():
         return redirect(url_for('login'))
     
     user_id = session['user_id']
-    log_activity(session['user_id'], 'Visited Student Dashboard')
 
     conn = get_db_connection()
     cursor = conn.cursor()
