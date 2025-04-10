@@ -12,6 +12,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from pytz import timezone
 import psycopg2
+import psycopg2.extras 
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -36,7 +37,7 @@ def log_activity(user_id, activity):
     conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
     timestamp = get_current_ist_time()
-    cursor.execute("INSERT INTO user_activity (user_id, activity,timestamp) VALUES (?, ?,?)", (user_id, activity,timestamp))
+    cursor.execute("INSERT INTO user_activity (user_id, activity,timestamp) VALUES (%s, %s,%s)", (user_id, activity,timestamp))
     conn.commit()
     conn.close()
 
@@ -44,13 +45,15 @@ def update_login_time(user_id):
     conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
     login_time = get_current_ist_time()
-    cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user_id))
+    cursor.execute("UPDATE users SET login_time=%s WHERE id=%s", (login_time, user_id))
     conn.commit()
     conn.close()
 
 # ✅ Connect to Database
 def get_db_connection():
     conn = psycopg2.connect(DATABASE_URL)
+    conn.autocommit = True
+    conn.cursor_factory = psycopg2.extras.DictCursor
     return conn
 
 @app.route('/sitemap.xml')
@@ -81,14 +84,16 @@ def update_group():
 
     try:
         conn = psycopg2.connect(DATABASE_URL)
-        cursor = conn.cursor()
+        conn.autocommit = True
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
 
         # Ensure the user exists before updating
-        cursor.execute("SELECT id FROM users WHERE id=?", (user_id,))
+        cursor.execute("SELECT id FROM users WHERE id=%s", (user_id,))
         user = cursor.fetchone()
         
         if user:
-            cursor.execute("UPDATE users SET student_group=? WHERE id=?", (student_group, user_id))
+            cursor.execute("UPDATE users SET student_group=%s WHERE id=%s", (student_group, user_id))
             conn.commit()
             
     except sqlite3.Error as e:
@@ -119,7 +124,7 @@ def signup():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         existing_user = cursor.fetchone()
 
         if existing_user:
@@ -162,12 +167,12 @@ def verify_otp():
             if user:
                 conn = get_db_connection()
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (?, ?, ?, 0)",
+                cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (%s, %s, %s, 0)",
                                (user['name'], user['email'], user['password']))
                 conn.commit()
 
                 # Get inserted user's ID
-                cursor.execute("SELECT id FROM users WHERE email = ?", (user['email'],))
+                cursor.execute("SELECT id FROM users WHERE email = %s", (user['email'],))
                 user_record = cursor.fetchone()
                 conn.close()
 
@@ -204,7 +209,7 @@ def login():
         cursor = conn.cursor()
 
         # First, check if the email exists
-        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
         if not user:
@@ -222,7 +227,7 @@ def login():
         log_activity(session['user_id'], 'logged in')
         login_time = get_current_ist_time()
 
-        cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user['id']))
+        cursor.execute("UPDATE users SET login_time=%s WHERE id=%s", (login_time, user['id']))
 
         conn.commit()
         conn.close()
@@ -251,7 +256,7 @@ def student_dashboard():
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, name, email, student_group, test_score, recommended_degrees FROM users WHERE id=?", (user_id,))
+    cursor.execute("SELECT id, name, email, student_group, test_score, recommended_degrees FROM users WHERE id=%s", (user_id,))
     student = cursor.fetchone()
     conn.close()
 
@@ -280,11 +285,11 @@ def aptitude_instructions():
     cursor = conn.cursor()
 
     # Check if user has already taken the test
-    cursor.execute("SELECT test_score FROM users WHERE id=?", (user_id,))
+    cursor.execute("SELECT test_score FROM users WHERE id=%s", (user_id,))
     test_score = cursor.fetchone()
 
     # Get the user's +2 group
-    cursor.execute("SELECT student_group FROM users WHERE id=?", (user_id,))
+    cursor.execute("SELECT student_group FROM users WHERE id=%s", (user_id,))
     group_result = cursor.fetchone()
     conn.close()
 
@@ -308,7 +313,7 @@ def aptitude_test():
     cursor = conn.cursor()
 
     # Get user's +2 group
-    cursor.execute("SELECT student_group FROM users WHERE id=?", (user_id,))
+    cursor.execute("SELECT student_group FROM users WHERE id=%s", (user_id,))
     result = cursor.fetchone()
 
     if not result or not result[0]:
@@ -322,7 +327,7 @@ def aptitude_test():
     student_group = result[0]
 
     # Check if test already submitted
-    cursor.execute("SELECT * FROM aptitude_results WHERE user_id=?", (user_id,))
+    cursor.execute("SELECT * FROM aptitude_results WHERE user_id=%s", (user_id,))
     test_result = cursor.fetchone()
     conn.close()
 
@@ -344,7 +349,7 @@ def submit_test():
     cursor = conn.cursor()
 
     # Get student group
-    cursor.execute("SELECT student_group FROM users WHERE id=?", (user_id,))
+    cursor.execute("SELECT student_group FROM users WHERE id=%s", (user_id,))
     row = cursor.fetchone()
     if not row:
         print("No user found in DB.")
@@ -450,7 +455,7 @@ def submit_test():
         cursor.execute("""
             INSERT INTO aptitude_results (
                 user_id, group_name, answers, questions, correct_answers, score, time_taken, submitted_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             user_id,
             group,
@@ -510,7 +515,7 @@ def submit_test():
 
         recommended_degrees = ", ".join(degree_recommendations.get(group, []))
         cursor.execute(
-            "UPDATE users SET test_score=?, recommended_degrees=? WHERE id=?",
+            "UPDATE users SET test_score=%s, recommended_degrees=%s WHERE id=%s",
             (score, recommended_degrees, user_id)
         )
         conn.commit()
@@ -533,7 +538,7 @@ def view_test_results():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT group_name, answers FROM aptitude_results WHERE user_id=?", (user_id,))
+    cursor.execute("SELECT group_name, answers FROM aptitude_results WHERE user_id=%s", (user_id,))
     result = cursor.fetchone()
     conn.close()
 
@@ -546,76 +551,76 @@ def view_test_results():
     # Map full question text for each group
     group_questions = {
         "Bio-Maths": {
-            "q1": "What is the powerhouse of the cell?",
-            "q2": "Which trigonometric function is periodic?",
-            "q3": "Who discovered the laws of motion?",
-            "q4": "Which blood group is called the universal donor?",
-            "q5": "What is the derivative of sin(x)?",
-            "q6": "Which organ secretes insulin?",
-            "q7": "DNA is made up of?",
-            "q8": "What is the SI unit of speed?",
-            "q9": "What is Avogadro’s number?",
-            "q10": "Who is the father of genetics?"
+            "q1": "What is the powerhouse of the cell%s",
+            "q2": "Which trigonometric function is periodic%s",
+            "q3": "Who discovered the laws of motion%s",
+            "q4": "Which blood group is called the universal donor%s",
+            "q5": "What is the derivative of sin(x)%s",
+            "q6": "Which organ secretes insulin%s",
+            "q7": "DNA is made up of%s",
+            "q8": "What is the SI unit of speed%s",
+            "q9": "What is Avogadro’s number%s",
+            "q10": "Who is the father of genetics%s"
         },
         "Science with Computer Science": {
-            "q1": "What does CPU stand for?",
-            "q2": "Which data structure follows LIFO?",
-            "q3": "Binary of decimal 8 is?",
-            "q4": "Which device routes data packets in networks?",
-            "q5": "Binary representation of decimal 10 is?",
-            "q6": "Which protocol is used for web communication?",
-            "q7": "Who founded Microsoft?",
-            "q8": "Which language is used to design web pages?",
-            "q9": "What executes instructions in a computer?",
-            "q10": "Which operator checks equality in Python?"
+            "q1": "What does CPU stand for%s",
+            "q2": "Which data structure follows LIFO%s",
+            "q3": "Binary of decimal 8 is%s",
+            "q4": "Which device routes data packets in networks%s",
+            "q5": "Binary representation of decimal 10 is%s",
+            "q6": "Which protocol is used for web communication%s",
+            "q7": "Who founded Microsoft%s",
+            "q8": "Which language is used to design web pages%s",
+            "q9": "What executes instructions in a computer%s",
+            "q10": "Which operator checks equality in Python%s"
         },
         "Commerce with Computer Applications": {
-            "q1": "Which software is used for accounting?",
-            "q2": "Which is used to design websites?",
-            "q3": "Which MS Office tool is spreadsheet-based?",
-            "q4": "Which is the primary storage device in a computer?",
-            "q5": "What is e-commerce?",
-            "q6": "Shortcut for copy in Windows is?",
-            "q7": "What is an email scam called?",
-            "q8": "Macro language in MS Excel is?",
-            "q9": "LAN stands for?",
-            "q10": "Which software is used for presentations?"
+            "q1": "Which software is used for accounting%s",
+            "q2": "Which is used to design websites%s",
+            "q3": "Which MS Office tool is spreadsheet-based%s",
+            "q4": "Which is the primary storage device in a computer%s",
+            "q5": "What is e-commerce%s",
+            "q6": "Shortcut for copy in Windows is%s",
+            "q7": "What is an email scam called%s",
+            "q8": "Macro language in MS Excel is%s",
+            "q9": "LAN stands for%s",
+            "q10": "Which software is used for presentations%s"
         },
         "Pure Commerce": {
-            "q1": "What does GDP stand for?",
-            "q2": "Which document shows assets and liabilities?",
-            "q3": "What type of tax is based on income?",
-            "q4": "What is an example of an expense?",
-            "q5": "What is the most liquid asset?",
-            "q6": "Which two terms are key in accounting?",
-            "q7": "Which body manages India's monetary policy?",
-            "q8": "Outstanding salary is shown as?",
-            "q9": "A bill sent by the seller is called?",
-            "q10": "Basic accounting equation is?"
+            "q1": "What does GDP stand for%s",
+            "q2": "Which document shows assets and liabilities%s",
+            "q3": "What type of tax is based on income%s",
+            "q4": "What is an example of an expense%s",
+            "q5": "What is the most liquid asset%s",
+            "q6": "Which two terms are key in accounting%s",
+            "q7": "Which body manages India's monetary policy%s",
+            "q8": "Outstanding salary is shown as%s",
+            "q9": "A bill sent by the seller is called%s",
+            "q10": "Basic accounting equation is%s"
         },
         "Arts with Computer Applications": {
-            "q1": "Which tool is used for graphic design?",
-            "q2": "Which software is used for 3D animation?",
-            "q3": "Who painted 'Starry Night'?",
-            "q4": "What tool is used with a drawing tablet?",
-            "q5": "Which art style uses geometric shapes?",
-            "q6": "Which software is best for document editing?",
-            "q7": "Which image format is widely used?",
-            "q8": "What does GUI stand for?",
-            "q9": "Which feature changes font size and style?",
-            "q10": "Which site is used to showcase portfolios?"
+            "q1": "Which tool is used for graphic design%s",
+            "q2": "Which software is used for 3D animation%s",
+            "q3": "Who painted 'Starry Night'%s",
+            "q4": "What tool is used with a drawing tablet%s",
+            "q5": "Which art style uses geometric shapes%s",
+            "q6": "Which software is best for document editing%s",
+            "q7": "Which image format is widely used%s",
+            "q8": "What does GUI stand for%s",
+            "q9": "Which feature changes font size and style%s",
+            "q10": "Which site is used to showcase portfolios%s"
         },
         "Pure Arts": {
-            "q1": "Who wrote 'Romeo and Juliet'?",
-            "q2": "Which classical dance originated in Tamil Nadu?",
-            "q3": "Which color is a secondary color?",
-            "q4": "Who painted the Mona Lisa?",
-            "q5": "What is a 14-line poem called?",
-            "q6": "What is folklore?",
-            "q7": "Who is a famous fable writer?",
-            "q8": "Which instrument is used in classical music?",
-            "q9": "What type of performance includes acting?",
-            "q10": "Who is known as the greatest English writer?"
+            "q1": "Who wrote 'Romeo and Juliet'%s",
+            "q2": "Which classical dance originated in Tamil Nadu%s",
+            "q3": "Which color is a secondary color%s",
+            "q4": "Who painted the Mona Lisa%s",
+            "q5": "What is a 14-line poem called%s",
+            "q6": "What is folklore%s",
+            "q7": "Who is a famous fable writer%s",
+            "q8": "Which instrument is used in classical music%s",
+            "q9": "What type of performance includes acting%s",
+            "q10": "Who is known as the greatest English writer%s"
         }
     }
 
@@ -737,11 +742,11 @@ def user_details(user_id):
     cursor = conn.cursor()
     
     # Fetch user details
-    cursor.execute("SELECT id, name, email, student_group, login_time FROM users WHERE id=?", (user_id,))
+    cursor.execute("SELECT id, name, email, student_group, login_time FROM users WHERE id=%s", (user_id,))
     user = cursor.fetchone()
     
     # Fetch user activities
-    cursor.execute("SELECT timestamp, activity FROM user_activity WHERE user_id=?", (user_id,))
+    cursor.execute("SELECT timestamp, activity FROM user_activity WHERE user_id=%s", (user_id,))
     activities = cursor.fetchall()
 
     # Count total activities
@@ -780,12 +785,12 @@ def submit_feedback():
         timestamp = get_current_ist_time()
         cursor.execute('''
             INSERT INTO feedback (name, email, message,timestamp)
-            VALUES (?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s)
         ''', (name, user_email, message, timestamp))
         conn.commit()
 
         # Get the latest inserted feedback with timestamp
-        cursor.execute('SELECT timestamp FROM feedback WHERE email = ? ORDER BY id DESC LIMIT 1', (user_email,))
+        cursor.execute('SELECT timestamp FROM feedback WHERE email = %s ORDER BY id DESC LIMIT 1', (user_email,))
         result = cursor.fetchone()
         feedback_timestamp = timestamp
         conn.close()
@@ -877,7 +882,7 @@ def recommended_courses():
     cursor = conn.cursor()
 
     # Fetch student details
-    cursor.execute("SELECT name, test_score, student_group FROM users WHERE id=?", (user_id,))
+    cursor.execute("SELECT name, test_score, student_group FROM users WHERE id=%s", (user_id,))
     student = cursor.fetchone()
 
     if student:
