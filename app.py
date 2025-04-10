@@ -11,6 +11,13 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from pytz import timezone
+import psycopg2
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -26,7 +33,7 @@ def get_current_ist_time():
     return datetime.datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
 
 def log_activity(user_id, activity):
-    conn = sqlite3.connect('career.db')
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
     timestamp = get_current_ist_time()
     cursor.execute("INSERT INTO user_activity (user_id, activity,timestamp) VALUES (?, ?,?)", (user_id, activity,timestamp))
@@ -34,7 +41,7 @@ def log_activity(user_id, activity):
     conn.close()
 
 def update_login_time(user_id):
-    conn = sqlite3.connect('career.db')
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
     login_time = get_current_ist_time()
     cursor.execute("UPDATE users SET login_time=? WHERE id=?", (login_time, user_id))
@@ -43,8 +50,7 @@ def update_login_time(user_id):
 
 # ✅ Connect to Database
 def get_db_connection():
-    conn = sqlite3.connect('career.db')
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 @app.route('/sitemap.xml')
@@ -74,7 +80,7 @@ def update_group():
         return redirect('/student_dashboard')
 
     try:
-        conn = sqlite3.connect('career.db')
+        conn = psycopg2.connect(DATABASE_URL)
         cursor = conn.cursor()
 
         # Ensure the user exists before updating
@@ -727,7 +733,7 @@ def admin_dashboard():
 
 @app.route('/user_details/<int:user_id>')
 def user_details(user_id):
-    conn = sqlite3.connect('career.db')
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
     
     # Fetch user details
@@ -867,7 +873,7 @@ def recommended_courses():
 
     user_id = session['user_id']
     log_activity(session['user_id'], 'Visited recommended courses')
-    conn = sqlite3.connect('career.db')
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
 
     # Fetch student details

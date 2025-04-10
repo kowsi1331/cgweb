@@ -11,38 +11,40 @@ def reset_database():
 
     cursor.executescript("""
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    is_admin INTEGER DEFAULT 0,
+    is_admin BOOLEAN DEFAULT FALSE,
     student_group TEXT,
     test_score INTEGER,
     recommended_degrees TEXT,
-    login_time TEXT
+    login_time TIMESTAMP
 );
 
-INSERT OR IGNORE INTO users (name, email, password, is_admin) VALUES
-('Kowsalya', 's.kowsalya3103@gmail.com', 'Kowsi_0731', 1),
-('Lavanya', 'anand.lavanya2005@gmail.com', 'lava@123', 1);
+INSERT INTO users (name, email, password, is_admin) VALUES
+('Kowsalya', 's.kowsalya3103@gmail.com', 'Kowsi_0731', TRUE),
+('Lavanya', 'anand.lavanya2005@gmail.com', 'lava@123', TRUE)
+ON CONFLICT DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS user_activity (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     activity TEXT NOT NULL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS feedback (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     message TEXT NOT NULL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-    CREATE TABLE aptitude_results (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+CREATE TABLE IF NOT EXISTS aptitude_results (
+    id SERIAL PRIMARY KEY,
     user_id INTEGER,
     group_name TEXT,
     questions TEXT,
@@ -50,7 +52,10 @@ CREATE TABLE IF NOT EXISTS feedback (
     answers TEXT,
     score INTEGER,
     time_taken INTEGER,
-    submitted_at TEXT
+    submitted_at TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 );
 
 """)
