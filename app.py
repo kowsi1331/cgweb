@@ -762,6 +762,8 @@ def user_details(user_id):
 # ✅ Logout
 @app.route('/logout')
 def logout():
+    if 'user_id' in session:
+        log_activity(session['user_id'], 'Logged out')
     session.clear()
     return redirect(url_for('login'))
 
