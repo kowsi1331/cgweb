@@ -167,7 +167,7 @@ def verify_otp():
             if user:
                 conn = get_db_connection()
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (%s, %s, %s, 0)",
+                cursor.execute("INSERT INTO users (name, email, password, is_admin) VALUES (%s, %s, %s, %s",
                                (user['name'], user['email'], user['password'],False))
                 conn.commit()
 
