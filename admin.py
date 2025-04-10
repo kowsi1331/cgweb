@@ -2,10 +2,12 @@ import psycopg2
 from psycopg2 import sql
 import os
 
-# Replace this with your actual DATABASE_URL or fetch from environment
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://career_nspr_user:1gUxsqTSBQQ3FZt0PS7hwY28gVIUNYve@dpg-cvrov0je5dus738em5jg-a/career_nspr")
+# Make sure this is the full and correct connection string with host ending in `.render.com`
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://career_nspr_user:1gUxsqTSBQQ3FZt0PS7hwY28gVIUNYve@dpg-cvrov0je5dus738em5jg-a.oregon-postgres.render.com/career_nspr")
 
 def reset_database():
+    conn = None
+    cursor = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cursor = conn.cursor()
@@ -73,7 +75,9 @@ def reset_database():
         print("❌ Error:", e)
 
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 reset_database()
