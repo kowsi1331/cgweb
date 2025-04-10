@@ -9,8 +9,7 @@ def reset_database():
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cursor = conn.cursor()
-       
-        
+
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
@@ -69,6 +68,7 @@ def reset_database():
 
         conn.commit()
         print("✅ PostgreSQL database reset and tables created!")
+
     except Exception as e:
         print("❌ Error:", e)
 
@@ -77,4 +77,3 @@ def reset_database():
         conn.close()
 
 reset_database()
-# This function resets the database and creates the necessary tables.
