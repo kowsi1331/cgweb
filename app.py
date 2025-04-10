@@ -727,7 +727,7 @@ def admin_dashboard():
         (SELECT COUNT(*) FROM user_activity WHERE user_activity.user_id = users.id) AS activity_count,
         (SELECT timestamp FROM user_activity WHERE user_activity.user_id = users.id ORDER BY timestamp DESC LIMIT 1) AS last_activity
     FROM users 
-    WHERE is_admin = 0
+    WHERE is_admin = False
 """)
 
     users = cursor.fetchall()
